@@ -1,0 +1,31 @@
+
+=== myriscv board bring-up test v1.0 ===
+core_clk   : 93750000 Hz (board_top.CORE_CLK_HZ)
+ROM/RAM    : 16 KiB / 16 KiB on-chip
+UART       : present (115200 8N1)
+LED map    : J16=clk alive  M17=ddr ready  K17=test status
+             K17 slow blink=RUN   steady=PASS   4Hz=FAIL
+
+[ 1] CPU 基本整数运算 -> PASS  14 项运算全部通过
+[ 2] CPU 分支与循环 -> PASS  累加/负向循环/有符号与无符号比较均正确
+[ 3] MMIO ID 识别 -> PASS  ID = 0x4d4d494f （'MMIO'）
+[ 4] MMIO SCRATCH 字节写使能 -> PASS  SW/SB/SH 写使能与数据移位正确（含 +1/+2/+3 偏移）
+[ 5] MMIO CYCLE 递增 -> PASS  2000 次空循环期间走了 4004 拍
+[ 6] 片内 RAM walking-1 -> PASS  1024 个字（4096 字节）walking-1 / 全0 / 全1 通过
+[ 7] 片内 RAM 地址混入数据 -> PASS  1024 个字地址混入数据全部一致
+[ 8] 片内 RAM 字节访问 -> PASS  128 个字节逐个写回一致，相邻字节无串扰
+[ 9] 片内 RAM 半字访问 -> PASS  高/低半字分别写入 32 个字，另一半均保持不变
+[10] 异常 非法指令 -> PASS  mcause=2, mepc=0x0000160c，且已正确返回继续执行
+[11] 异常 未映射地址访问 -> PASS  mcause=5, mtval=0x20000000
+[12] 异常 MMIO 未实现偏移 -> PASS  未实现偏移正确报访问故障 mtval=0x10000020
+[13] 异常 非对齐访存 -> PASS  mcause=4, mtval=0x00001801
+[14] UART 存在性 -> PASS  STATUS=0x05, TX_READY=1, TX_BUSY=0
+[15] UART 发送 -> [boardtest] UART-TX-MARKER-0123456789
+PASS  已发出 UART-TX-MARKER 串；PC 端能看到即为 TX 通路正常
+[16] DDR 窗口读写 -> PASS  0x40000000 起 4 KiB 地址混入数据全部一致
+[17] DDR 远端地址不混叠 -> PASS  +0 / +2 MiB / +16 MiB 三处互不影响
+[18] UART 接收中断 -> PASS  收到 1 次中断, ISR 读到的字节 = 0x48 ('H')
+
+SUMMARY: 18 PASS / 0 FAIL / 0 SKIP  (total 18)
+RESULT: PASS board bring-up OK. K17 should be STEADY ON.
+RESULT-LINE: boardtest pass=18 fail=0 skip=0

@@ -1,0 +1,27 @@
+
+=== CoreMark on myriscv (RV32I, 5-stage) ===
+CPU clock (core_clk) : 93750000 Hz
+Timer                : simple_mmio CYCLE @ 0x10000008 (32-bit)
+MMIO ID              : 0x4d4d494f (expect 0x4d4d494f)
+Iterations macro     : 1 (0 = ç± CoreMark èªå¨ç¡®å®å° >=10 ç§)
+
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total ticks      : 822026
+Total time (secs): 0.008768
+Iterations/Sec   : 114.047488
+ERROR! Must execute for at least 10 secs for a valid result!
+Iterations       : 1
+Compiler version : GCC 15.2.0
+Compiler flags   : -march=rv32i_zicsr -mabi=ilp32 -mcmodel=medlow -Os -ffreestanding -fno-builtin -fno-common -fno-strict-aliasing -ffunction-sections -fdata-sections -Wall -Wextra -Wno-unused-parameter -Wno-maybe-uninitialized -nostdlib -nostartfiles -nodefaultlibs -IC:/Users/Lenovo/Documents/deepseek-harness/default-workspace/coremark/official -IC:/Users/Lenovo/Documents/deepseek-harness/default-workspace/coremark/port -IC:/Users/Lenovo/Documents/deepseek-harness/default-workspace/coremark/bsp -DITERATIONS=1 -DPERFORMANCE_RUN=1 -DTOTAL_DATA_SIZE=2000 -DCM_CONSOLE=1
+Memory location  : STATIC
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0xe714
+Errors detected
+
+NOTE: elapsed ticks = 822026 (< 1 s).
+
+RESULT: FAIL CoreMark reported errors.

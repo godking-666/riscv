@@ -1,0 +1,662 @@
+Archive member included to satisfy reference by file (symbol)
+
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__divdf3)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__gtdf2)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__ltdf2)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__fixunsdfsi)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__floatunsidf)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__mulsi3)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o (__udivsi3)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+                              C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o) (__clzsi2)
+C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+                              C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o) (__clz_tab)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .rodata.str1.4
+                0x00000000       0x16 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .data.mem_name
+                0x00000000        0xc C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .text.copy_info
+                0x00000000       0x14 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .text.core_list_undo_remove
+                0x00000000       0x20 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text.barebones_clock
+                0x00000000        0xc C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text.cm_ticks_to_secs
+                0x00000000       0x30 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text.cm_console_rx_ready
+                0x00000000       0x14 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text.cm_console_getc
+                0x00000000       0x2c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text.portable_malloc
+                0x00000000        0x8 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text.portable_free
+                0x00000000        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQKC7oF.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQKC7oF.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQKC7oF.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.memcpy   0x00000000       0x54 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.memmove  0x00000000       0x58 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.memset   0x00000000       0x58 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.memcmp   0x00000000       0x30 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.strlen   0x00000000       0x1c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.strcpy   0x00000000       0x1c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text.strcmp   0x00000000       0x24 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .riscv.attributes
+                0x00000000       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .text          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+ .data          0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+ .bss           0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+ .comment       0x00000000       0x34 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+ .note.GNU-stack
+                0x00000000        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ROM              0x00000000         0x00004000         xr
+RAMDATA          0x00000000         0x00002800         xrw
+STACK            0x00002800         0x00001800         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQKC7oF.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccSw66IJ.o
+                0x00002800                        _stack_bottom = ORIGIN (STACK)
+                0x00004000                        _stack_top = (ORIGIN (STACK) + LENGTH (STACK))
+
+.text           0x00000000     0x3678
+                0x00000000                        . = ALIGN (0x4)
+ *(.text.start)
+ .text.start    0x00000000       0x84 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQKC7oF.o
+                0x00000000                _start
+                0x00000070                cm_trap_entry
+ *(.text .text.*)
+ .text.iterate  0x00000084       0x88 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+                0x00000084                iterate
+ .text.startup.main
+                0x0000010c      0x75c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+                0x0000010c                main
+ .text.cmp_idx  0x00000868       0x44 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000868                cmp_idx
+ .text.calc_func
+                0x000008ac      0x104 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x000008ac                calc_func
+ .text.cmp_complex
+                0x000009b0       0x48 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x000009b0                cmp_complex
+ .text.core_list_insert_new
+                0x000009f8       0x5c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x000009f8                core_list_insert_new
+ .text.core_list_remove
+                0x00000a54       0x2c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000a54                core_list_remove
+ .text.core_list_find
+                0x00000a80       0x40 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000a80                core_list_find
+ .text.core_list_reverse
+                0x00000ac0       0x24 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000ac0                core_list_reverse
+ .text.core_list_mergesort
+                0x00000ae4      0x12c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000ae4                core_list_mergesort
+ .text.core_bench_list
+                0x00000c10      0x1fc C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000c10                core_bench_list
+ .text.core_list_init
+                0x00000e0c      0x170 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+                0x00000e0c                core_list_init
+ .text.core_init_matrix
+                0x00000f7c      0x178 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00000f7c                core_init_matrix
+ .text.matrix_sum
+                0x000010f4       0x70 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x000010f4                matrix_sum
+ .text.matrix_mul_const
+                0x00001164       0xb0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00001164                matrix_mul_const
+ .text.matrix_add_const
+                0x00001214       0x40 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00001214                matrix_add_const
+ .text.matrix_mul_vect
+                0x00001254       0xc4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00001254                matrix_mul_vect
+ .text.matrix_mul_matrix
+                0x00001318      0x104 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00001318                matrix_mul_matrix
+ .text.matrix_mul_matrix_bitextract
+                0x0000141c      0x118 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x0000141c                matrix_mul_matrix_bitextract
+ .text.matrix_test
+                0x00001534      0x154 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00001534                matrix_test
+ .text.core_bench_matrix
+                0x00001688       0x3c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+                0x00001688                core_bench_matrix
+ .text.core_init_state
+                0x000016c4      0x124 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+                0x000016c4                core_init_state
+ .text.core_state_transition
+                0x000017e8      0x1b8 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+                0x000017e8                core_state_transition
+ .text.core_bench_state
+                0x000019a0      0x180 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+                0x000019a0                core_bench_state
+ .text.get_seed_32
+                0x00001b20       0x50 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+                0x00001b20                get_seed_32
+ .text.crcu8    0x00001b70      0x128 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+                0x00001b70                crcu8
+ .text.crcu16   0x00001c98       0x30 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+                0x00001c98                crcu16
+ .text.crcu32   0x00001cc8       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+                0x00001cc8                crcu32
+ .text.crc16    0x00001cfc        0xc C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+                0x00001cfc                crc16
+ .text.check_data_types
+                0x00001d08        0x8 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+                0x00001d08                check_data_types
+ .text.start_time
+                0x00001d10       0x18 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001d10                start_time
+ .text.stop_time
+                0x00001d28       0x20 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001d28                stop_time
+ .text.get_time
+                0x00001d48        0x8 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001d48                get_time
+ .text.time_in_secs
+                0x00001d50       0x24 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001d50                time_in_secs
+ .text.cm_console_putc
+                0x00001d74       0x40 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001d74                cm_console_putc
+ .text.portable_init
+                0x00001db4       0x9c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001db4                portable_init
+ .text.portable_fini
+                0x00001e50       0xe0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001e50                portable_fini
+ .text.cm_trap_report
+                0x00001f30       0x68 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00001f30                cm_trap_report
+ .text.cm_bits53
+                0x00001f98       0x60 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .text.str_has  0x00001ff8       0x4c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .text.out_char
+                0x00002044       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .text.out_uint
+                0x00002078      0x104 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .text.out_str  0x0000217c       0x3c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .text.ee_printf
+                0x000021b8      0x518 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+                0x000021b8                ee_printf
+ .text.__divdf3
+                0x000026d0      0xb1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                0x000026d0                __divdf3
+ .text.__gedf2  0x000031ec      0x110 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+                0x000031ec                __gedf2
+                0x000031ec                __gtdf2
+ .text.__ledf2  0x000032fc      0x118 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+                0x000032fc                __ledf2
+                0x000032fc                __ltdf2
+ .text.__fixunsdfsi
+                0x00003414       0x70 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+                0x00003414                __fixunsdfsi
+ .text.__floatunsidf
+                0x00003484       0xa0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+                0x00003484                __floatunsidf
+ .text          0x00003524       0x24 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                0x00003524                __mulsi3
+ .text          0x00003548       0xb4 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                0x00003548                __divsi3
+                0x00003550                __udivsi3
+                0x00003550                __hidden___udivsi3
+                0x00003598                __umodsi3
+                0x000035cc                __modsi3
+ .text.__clzsi2
+                0x000035fc       0x7c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+                0x000035fc                __clzsi2
+                0x00003678                        . = ALIGN (0x4)
+                0x00003678                        __text_end = .
+
+.sdata          0x00000000        0xc
+                0x00000000                        . = ALIGN (0x4)
+                0x00000000                        __sdata_start = .
+                0x00000800                        PROVIDE (__global_pointer$ = (. + 0x800))
+ *(.sdata .sdata.*)
+ .sdata.default_num_contexts
+                0x00000000        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00000000                default_num_contexts
+ .sdata.seed4_volatile
+                0x00000004        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00000004                seed4_volatile
+ .sdata.seed3_volatile
+                0x00000008        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00000008                seed3_volatile
+ *(.sdata2 .sdata2.*)
+                0x0000000c                        . = ALIGN (0x4)
+                0x0000000c                        __sdata_end = .
+
+.sbss           0x0000000c       0x20
+                0x0000000c                        . = ALIGN (0x4)
+                0x0000000c                        __sbss_start = .
+ *(.sbss .sbss.*)
+ .sbss.cm_elapsed_ticks
+                0x0000000c        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .sbss.cm_stop_seen
+                0x00000010        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .sbss.cm_start_seen
+                0x00000014        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .sbss.start_time_val
+                0x00000018        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .sbss.cm_result_ok
+                0x0000001c        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x0000001c                cm_result_ok
+ .sbss.seed5_volatile
+                0x00000020        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00000020                seed5_volatile
+ .sbss.seed2_volatile
+                0x00000024        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00000024                seed2_volatile
+ .sbss.seed1_volatile
+                0x00000028        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                0x00000028                seed1_volatile
+ *(.sbss2 .sbss2.*)
+                0x0000002c                        . = ALIGN (0x4)
+                0x0000002c                        __sbss_end = .
+
+.data           0x0000002c        0x0
+                0x0000002c                        . = ALIGN (0x4)
+                0x0000002c                        __data_start = .
+ *(.data .data.*)
+ *(.gnu.linkonce.d.*)
+                0x0000002c                        . = ALIGN (0x4)
+                0x0000002c                        __data_end = .
+
+.rodata         0x00000030      0xe98
+                0x00000030                        . = ALIGN (0x4)
+                0x00000030                        __rodata_start = .
+ *(.rodata .rodata.*)
+ .rodata.main.str1.4
+                0x00000030      0xa49 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+                                0x637 (size before relaxing)
+ *fill*         0x00000a79        0x3 
+ .rodata.state_known_crc
+                0x00000a7c        0xa C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ *fill*         0x00000a86        0x2 
+ .rodata.matrix_known_crc
+                0x00000a88        0xa C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ *fill*         0x00000a92        0x2 
+ .rodata.list_known_crc
+                0x00000a94        0xa C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ *fill*         0x00000a9e        0x2 
+ .rodata.core_state_transition
+                0x00000aa0       0x20 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .rodata.str1.4
+                0x00000ac0        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+                                 0xad (size before relaxing)
+ .rodata.errpat
+                0x00000ac0       0x10 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .rodata.scipat
+                0x00000ad0       0x10 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .rodata.floatpat
+                0x00000ae0       0x10 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .rodata.intpat
+                0x00000af0       0x10 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .rodata.get_seed_32
+                0x00000b00       0x14 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .rodata        0x00000b14      0x200 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .rodata.portable_init.str1.4
+                0x00000d14        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                                0x110 (size before relaxing)
+ .rodata.portable_fini.str1.4
+                0x00000d14        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                                0x121 (size before relaxing)
+ .rodata.cm_trap_report.str1.4
+                0x00000d14        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                                 0xa6 (size before relaxing)
+ .rodata.out_uint.str1.4
+                0x00000d14        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+                                 0x25 (size before relaxing)
+ .rodata.out_str.str1.4
+                0x00000d14        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+                                  0x7 (size before relaxing)
+ .rodata.ee_printf.str1.4
+                0x00000d14        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+                                 0x5d (size before relaxing)
+ .rodata.ee_printf
+                0x00000d14       0x58 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .rodata.__divdf3
+                0x00000d6c       0x40 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .rodata.__clz_tab
+                0x00000dac      0x100 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+                0x00000dac                __clz_tab
+ *(.rodata1)
+ *(.srodata .srodata.*)
+ *fill*         0x00000eac        0x4 
+ .srodata.cst8  0x00000eb0       0x18 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+                                 0x10 (size before relaxing)
+ .srodata.cst8  0x00000ec8        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+                                  0x8 (size before relaxing)
+ *(.gnu.linkonce.r.*)
+                0x00000ec8                        . = ALIGN (0x4)
+                0x00000ec8                        __rodata_end = .
+
+.rela.dyn       0x00000ec8        0x0
+ .rela.text.start
+                0x00000ec8        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+
+.init_array     0x00000ec8        0x0
+                0x00000ec8                        . = ALIGN (0x4)
+                0x00000ec8                        __init_array_start = .
+ *(.init_array .init_array.*)
+                0x00000ec8                        __init_array_end = .
+                0x00000ec8                        . = ALIGN (0x4)
+
+.bss            0x00000ec8      0x7d0
+                0x00000ec8                        . = ALIGN (0x4)
+                0x00000ec8                        __bss_start = .
+ *(.bss .bss.*)
+ .bss.static_memblk
+                0x00000ec8      0x7d0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+                0x00000ec8                static_memblk
+ *(.gnu.linkonce.b.*)
+ *(COMMON)
+                0x00001698                        . = ALIGN (0x4)
+                0x00001698                        __bss_end = .
+                0x00001698                        __ram_data_end = .
+                0x0000002c                        __data_lma = LOADADDR (.data)
+
+/DISCARD/
+ *(.comment)
+ *(.note .note.*)
+ *(.eh_frame .eh_frame_hdr)
+                0x00000001                        ASSERT ((__text_end <= (ORIGIN (ROM) + LENGTH (ROM))), ERROR: .text exceeds the 16 KiB on-chip ROM. Use -Os, shrink the printf, or expand the ROM IP (see README).)
+                0x00000001                        ASSERT ((__ram_data_end <= ORIGIN (STACK)), ERROR: .sdata/.sbss/.data/.rodata/.bss exceed 10 KiB, they would collide with the stack region.)
+                0x00000001                        ASSERT (((__sbss_end - __sdata_start) <= 0x1000), ERROR: small-data (.sdata+.sbss) is larger than 4 KiB, gp-relative addressing may go out of range. Rebuild with -msmall-data-limit=0.)
+LOAD C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a
+OUTPUT(C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/coremark/build/coremark.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x00000000       0x29
+ .riscv.attributes
+                0x00000000       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc6AT8B3.o
+ .riscv.attributes
+                0x00000025       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccehc3sf.o
+ .riscv.attributes
+                0x0000004a       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccczPqpm.o
+ .riscv.attributes
+                0x0000006f       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccqF69NI.o
+ .riscv.attributes
+                0x00000094       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccO6F2Wd.o
+ .riscv.attributes
+                0x000000b9       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQgAxnR.o
+ .riscv.attributes
+                0x000000de       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cc4ouQaG.o
+ .riscv.attributes
+                0x00000103       0x27 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccQKC7oF.o
+ .riscv.attributes
+                0x0000012a       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .riscv.attributes
+                0x00000146       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .riscv.attributes
+                0x00000162       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .riscv.attributes
+                0x0000017e       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .riscv.attributes
+                0x0000019a       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .riscv.attributes
+                0x000001b6       0x1a C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .riscv.attributes
+                0x000001d0       0x1a C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .riscv.attributes
+                0x000001ea       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .riscv.attributes
+                0x00000206       0x1c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+
+.debug_info     0x00000000     0x14f3
+ .debug_info    0x00000000      0x905 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_info    0x00000905      0x25e C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_info    0x00000b63      0x25e C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_info    0x00000dc1      0x1ca C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_info    0x00000f8b      0x27e C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_info    0x00001209       0x31 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_info    0x0000123a       0x5f C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .debug_info    0x00001299      0x168 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .debug_info    0x00001401       0xf2 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+
+.debug_abbrev   0x00000000      0x905
+ .debug_abbrev  0x00000000      0x19f C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_abbrev  0x0000019f      0x172 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_abbrev  0x00000311      0x172 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_abbrev  0x00000483      0x171 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_abbrev  0x000005f4      0x172 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_abbrev  0x00000766       0x28 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_abbrev  0x0000078e       0x28 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .debug_abbrev  0x000007b6       0xd9 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .debug_abbrev  0x0000088f       0x76 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+
+.debug_loclists
+                0x00000000     0x2153
+ .debug_loclists
+                0x00000000     0x1a8c C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_loclists
+                0x00001a8c      0x1d3 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_loclists
+                0x00001c5f      0x1d9 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_loclists
+                0x00001e38       0xc6 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_loclists
+                0x00001efe      0x172 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_loclists
+                0x00002070       0xe3 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+
+.debug_aranges  0x00000000      0x118
+ .debug_aranges
+                0x00000000       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_aranges
+                0x00000020       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_aranges
+                0x00000040       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_aranges
+                0x00000060       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_aranges
+                0x00000080       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_aranges
+                0x000000a0       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_aranges
+                0x000000c0       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .debug_aranges
+                0x000000e0       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .debug_aranges
+                0x00000100       0x18 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+
+.debug_rnglists
+                0x00000000      0x338
+ .debug_rnglists
+                0x00000000      0x1e1 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_rnglists
+                0x000001e1       0x52 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_rnglists
+                0x00000233       0x4a C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_rnglists
+                0x0000027d       0x1f C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_rnglists
+                0x0000029c       0x72 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_rnglists
+                0x0000030e       0x2a C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+
+.debug_line     0x00000000     0x2dc8
+ .debug_line    0x00000000     0x1d05 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_line    0x00001d05      0x428 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_line    0x0000212d      0x43a C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_line    0x00002567      0x1e1 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_line    0x00002748      0x30b C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_line    0x00002a53       0x7a C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_line    0x00002acd      0x153 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .debug_line    0x00002c20      0x15f C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+ .debug_line    0x00002d7f       0x49 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+
+.debug_str      0x00000000      0x772
+ .debug_str     0x00000000      0x772 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                                0x3a7 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+                                0x1f2 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+                                0x1f2 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+                                0x1c5 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+                                0x261 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                                0x1a3 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                                0x1d0 (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+                                0x1ec (size before relaxing)
+ .debug_str     0x00000772        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+                                0x1cf (size before relaxing)
+
+.debug_line_str
+                0x00000000      0x705
+ .debug_line_str
+                0x00000000      0x705 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+                                0x248 (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+                                0x24a (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+                                0x24a (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+                                0x250 (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+                                0x252 (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                                0x18e (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                                0x18b (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
+                                0x231 (size before relaxing)
+ .debug_line_str
+                0x00000705        0x0 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clz.o)
+                                0x231 (size before relaxing)
+
+.debug_frame    0x00000000      0x1c0
+ .debug_frame   0x00000000      0x108 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(divdf3.o)
+ .debug_frame   0x00000108       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(gedf2.o)
+ .debug_frame   0x00000128       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(ledf2.o)
+ .debug_frame   0x00000148       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(fixunsdfsi.o)
+ .debug_frame   0x00000168       0x38 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(floatunsidf.o)
+ .debug_frame   0x000001a0       0x20 C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/_staging/toolchain/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(_clzsi2.o)
