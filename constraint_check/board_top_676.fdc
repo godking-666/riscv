@@ -1,0 +1,258 @@
+#=============================================================================
+# board_top_676.fdc -- 盘古 676 系列 MINI-200H 板级约束（PG2L200H-6IFBG676）
+#
+# 生成日期：2026-10-12
+# 引脚来源（双源交叉核对，全部一致）：
+#   1) 3_Hardware/FPGA管脚分配/mini-base管脚映射.xlsx   （厂商权威表）
+#   2) toCPU_vision_20261012/pds/vision.fdc              （团队已上板验证的映射）
+#
+# ★ 与旧板（PG2L100H-6IFBG484）完全不同，旧约束文件不可复用。
+# ★ 本文件对应「G1 范围」顶层 board_top_676：CPU + 片内 ROM/RAM + MMIO + UART + GPIO。
+#   DDR3 / vision_top / HDMI 的引脚在 D2/D3 接入时再追加。
+#=============================================================================
+
+#-----------------------------------------------------------------------------
+# 【时序】主时钟 27MHz 单端有源晶振（D18）
+#   周期 = 1/27MHz = 37.037 ns
+#   后续切 PLL(108MHz) 时，clk_27m 仍是输入时钟，core_clk 由 PLL 内部产生，
+#   PDS 会自动为 PLL 输出建立生成时钟；届时**不要**手工再加 create_clock。
+#-----------------------------------------------------------------------------
+create_clock -name clk_27m -period 37.037 [get_ports {clk_27m}]
+
+#-----------------------------------------------------------------------------
+# 【时序】异步/慢速输入：全部经过内部同步器，对本时钟无建立保持要求
+#   rstn_ext : 按键复位，经 4 拍 POR + 3 拍同步
+#   key[3:0] : 按键，经 gpio_mmio 内部两级同步
+#   两者都是人手操作（Hz 级），做时序分析没有意义。
+#-----------------------------------------------------------------------------
+set_false_path -from [get_ports {rstn_ext}]
+set_false_path -from [get_ports {key[*]}]
+
+#-----------------------------------------------------------------------------
+# 【时序】输出：UART 与 LED
+#   UART 115200 波特（位宽 8680ns）远慢于时钟；LED 是肉眼指示。
+#   外部没有采样器在 clk 沿建立数据，真实建立时间需求 ~0。
+#   这里按 2ns 留裕量声明，避免 PDS 慢角 IOB obuf->pad 路径（典型 6~7ns）
+#   报出虚的负 slack。
+#-----------------------------------------------------------------------------
+set_output_delay -clock clk_27m -max 2.000 [get_ports {uart_txd led[*]}]
+
+#=============================================================================
+# 【物理引脚约束 Io Table】
+#   语法依据：团队 vision.fdc（已上板验证）
+#   define_attribute {p:<port>} {PAP_IO_DIRECTION} {Input|Output|INOUT}
+#   define_attribute {p:<port>} {PAP_IO_LOC}       {<pin>}
+#   define_attribute {p:<port>} {PAP_IO_VCCIO}     {3.3}
+#   define_attribute {p:<port>} {PAP_IO_STANDARD}  {LVCMOS33}
+#   Bank L3/L4/L5 = 3.3V，用户 LED/按键/串口都在 L3。
+#=============================================================================
+
+###---- 时钟 ----
+define_attribute {p:clk_27m} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:clk_27m} {PAP_IO_LOC} {D18}
+define_attribute {p:clk_27m} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:clk_27m} {PAP_IO_STANDARD} {LVCMOS33}
+
+###---- 复位（KEY0，低有效）----
+define_attribute {p:rstn_ext} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:rstn_ext} {PAP_IO_LOC} {C22}
+define_attribute {p:rstn_ext} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:rstn_ext} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:rstn_ext} {PAP_IO_PULLUP} {TRUE}
+
+###---- 串口（CP2102，Type-C，115200-8N1）----
+define_attribute {p:uart_txd} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:uart_txd} {PAP_IO_LOC} {C24}
+define_attribute {p:uart_txd} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:uart_txd} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:uart_rxd} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:uart_rxd} {PAP_IO_LOC} {B24}
+define_attribute {p:uart_rxd} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:uart_rxd} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:uart_rxd} {PAP_IO_PULLUP} {TRUE}
+
+###---- 用户 LED（高电平亮，Bank L3）----
+define_attribute {p:led[0]} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led[0]} {PAP_IO_LOC} {A20}
+define_attribute {p:led[0]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led[0]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:led[1]} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led[1]} {PAP_IO_LOC} {C18}
+define_attribute {p:led[1]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led[1]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:led[2]} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led[2]} {PAP_IO_LOC} {C19}
+define_attribute {p:led[2]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led[2]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:led[3]} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led[3]} {PAP_IO_LOC} {E18}
+define_attribute {p:led[3]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led[3]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:led[4]} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led[4]} {PAP_IO_LOC} {A17}
+define_attribute {p:led[4]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led[4]} {PAP_IO_STANDARD} {LVCMOS33}
+
+###---- 用户按键 KEY1..KEY4（低有效，低有效需上拉）----
+define_attribute {p:key[0]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:key[0]} {PAP_IO_LOC} {C23}
+define_attribute {p:key[0]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:key[0]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:key[0]} {PAP_IO_PULLUP} {TRUE}
+
+define_attribute {p:key[1]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:key[1]} {PAP_IO_LOC} {B22}
+define_attribute {p:key[1]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:key[1]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:key[1]} {PAP_IO_PULLUP} {TRUE}
+
+define_attribute {p:key[2]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:key[2]} {PAP_IO_LOC} {A22}
+define_attribute {p:key[2]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:key[2]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:key[2]} {PAP_IO_PULLUP} {TRUE}
+
+define_attribute {p:key[3]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:key[3]} {PAP_IO_LOC} {B20}
+define_attribute {p:key[3]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:key[3]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:key[3]} {PAP_IO_PULLUP} {TRUE}
+
+#=============================================================================
+# 【附：D2/D3 接入时要追加的引脚，先记录，本轮不启用】
+#
+# --- OV5640 双目（J10 扩展口 pin-pin 直插，模组自带 24MHz 晶振）---
+#     CAM1（单路上板优先）：
+#       cam_pclk=L22  cam_vsync=L23  cam_href=T25
+#       cam_data[0]=M24 cam_data[1]=R22 cam_data[2]=K26 cam_data[3]=K25
+#       cam_data[4]=M25 cam_data[5]=N19 cam_data[6]=T24 cam_data[7]=R21
+#       cam_scl=P19（Output）  cam_sda=R20（INOUT）  cam_reset_n=T22（Output）
+#     CAM2（双目选路，后续增强）：
+#       cam2_pclk=M21  cam2_vsync=U25  cam2_href=U26
+#       cam2_data[0]=M22 [1]=R23 [2]=T23 [3]=AB24 [4]=P26 [5]=M26 [6]=AA24 [7]=AB25
+#       cam2_sda=Y25  cam2_scl=AC24  cam2_reset_n=AC26
+#     全部 LVCMOS33 / VCCIO 3.3
+#
+# --- HDMI 输出（MS72xx，若走 HDMI 显示路线）---
+#       HDMI_TX_CLK_P=N21  HDMI_TX_CLK_N=N22
+#       HDMI_TX_D0_P=R25   HDMI_TX_D0_N=P25
+#       HDMI_TX_D1_P=P23   HDMI_TX_D1_N=P24
+#       HDMI_TX_D2_P=N23   HDMI_TX_D2_N=N24
+#       HDMI_TX_SCL=M2  HDMI_TX_SDA=L20  HDMI_TX_HPD=P16
+#
+# --- HDMI 输入 MS7200（备用图像源）---
+#       HD_RX_PCLK=K21  HD_RX_VS=M14  HD_RX_HS=M17  HD_RX_DE=M16
+#       HD_RX_D[23:0]=L18 L17 H18 J18 J21 H23 J23 H24 J24 K23 K22 J16
+#                     K15 K17 K16 L15 M15 H19 J19 J20 K20 G21 G20 H22
+#       HD_RX_INT=L14  HSP_SDA=J14  HSP_SCL=J15
+#
+# --- DDR3（R4/R5 BANK，1.5V，需用 200H 的 DDR3 IP 生成后由 PDS 自动加约束）---
+#       125MHz 差分参考：N3/N2
+#
+# --- 27MHz 备用源 ---
+#       FPGA_GCLK_27M 备用（扩展底板）= E17
+#=============================================================================
+
+###---- OV5640 摄像头 CAM1（J17 排针 pin-pin 直插 J10 扩展口，D2 启用）----
+### 模组自带 24MHz 晶振，无 cam_xclk；J17 无 PWDN 脚，故顶层不引出 cam_pwdn。
+define_attribute {p:cam_pclk} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_pclk} {PAP_IO_LOC} {L22}
+define_attribute {p:cam_pclk} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_pclk} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_vsync} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_vsync} {PAP_IO_LOC} {L23}
+define_attribute {p:cam_vsync} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_vsync} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_href} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_href} {PAP_IO_LOC} {T25}
+define_attribute {p:cam_href} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_href} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[0]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[0]} {PAP_IO_LOC} {M24}
+define_attribute {p:cam_data[0]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[0]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[1]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[1]} {PAP_IO_LOC} {R22}
+define_attribute {p:cam_data[1]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[1]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[2]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[2]} {PAP_IO_LOC} {K26}
+define_attribute {p:cam_data[2]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[2]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[3]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[3]} {PAP_IO_LOC} {K25}
+define_attribute {p:cam_data[3]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[3]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[4]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[4]} {PAP_IO_LOC} {M25}
+define_attribute {p:cam_data[4]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[4]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[5]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[5]} {PAP_IO_LOC} {N19}
+define_attribute {p:cam_data[5]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[5]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[6]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[6]} {PAP_IO_LOC} {T24}
+define_attribute {p:cam_data[6]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[6]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_data[7]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[7]} {PAP_IO_LOC} {R21}
+define_attribute {p:cam_data[7]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[7]} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_scl} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:cam_scl} {PAP_IO_LOC} {P19}
+define_attribute {p:cam_scl} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_scl} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_sda} {PAP_IO_DIRECTION} {INOUT}
+define_attribute {p:cam_sda} {PAP_IO_LOC} {R20}
+define_attribute {p:cam_sda} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_sda} {PAP_IO_STANDARD} {LVCMOS33}
+
+define_attribute {p:cam_reset_n} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:cam_reset_n} {PAP_IO_LOC} {T22}
+define_attribute {p:cam_reset_n} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_reset_n} {PAP_IO_STANDARD} {LVCMOS33}
+
+
+#-----------------------------------------------------------------------------
+# 输出/双向端口的驱动能力与压摆率（清 ConstraintEditor-2009 提示）
+#   DRIVE 8 = 8mA（LED/串口/摄像头控制线都是低速信号，8mA 足够）
+#   SLEW SLOW = 慢压摆，降低 EMI，低速信号不需要快边沿
+#-----------------------------------------------------------------------------
+define_attribute {p:uart_txd} {PAP_IO_DRIVE} {8}
+define_attribute {p:uart_txd} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:led[0]} {PAP_IO_DRIVE} {8}
+define_attribute {p:led[0]} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:led[1]} {PAP_IO_DRIVE} {8}
+define_attribute {p:led[1]} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:led[2]} {PAP_IO_DRIVE} {8}
+define_attribute {p:led[2]} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:led[3]} {PAP_IO_DRIVE} {8}
+define_attribute {p:led[3]} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:led[4]} {PAP_IO_DRIVE} {8}
+define_attribute {p:led[4]} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:cam_scl} {PAP_IO_DRIVE} {8}
+define_attribute {p:cam_scl} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:cam_sda} {PAP_IO_DRIVE} {8}
+define_attribute {p:cam_sda} {PAP_IO_SLEW} {SLOW}
+define_attribute {p:cam_reset_n} {PAP_IO_DRIVE} {8}
+define_attribute {p:cam_reset_n} {PAP_IO_SLEW} {SLOW}
+
+###==== END Io Table

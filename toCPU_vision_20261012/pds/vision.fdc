@@ -1,0 +1,187 @@
+#=============================================================================
+# timings.sdc -- 视觉子系统时序约束（紫光同创 PDS / 标准 SDC）
+#
+# 用法：PDS 工程里 “约束文件” 添加本文件。
+#       ★ 若 CPU 组已有自己的顶层 SDC，只把本文件里带 “【并入】” 的段落并过去即可，
+#         不要同时创建两个 create_clock 对同一时钟重复约束。
+#
+# ★ 板卡 2026-10-12 更换：赛题板(FBG484) → 盘古100K MINI(FBG676, 小眼睛科技)。
+#   新板系统时钟源 = 27MHz 单端晶振(FPGA_GCLK_27M=D18)，须经 GPLL 倍频生成系统时钟；
+#   原 93.75MHz 假设（CPU 组 core_clk 2026-10-05）已失效，倍频方案待 CPU 组定 core_clk 后更新。
+#   图像源待定：OV5640(DVP 8bit) vs HDMI 输入(MS7200 DVP 24bit)——时钟与端口名随决策更新。
+#=============================================================================
+
+#-----------------------------------------------------------------------------
+# 【并入】主时钟
+#-----------------------------------------------------------------------------
+# ★ 2026-10-12 定案（demo 版）：新板 27MHz 晶振(D18) 直驱，CAM_CLK_HZ=27MHz；
+#   UART 误差 +0.16%、SCCB +0.75%，均在容差内。
+#   整包 SoC 若统一倍频（候选 108MHz=27x4），须 CPU 组定 core_clk 后改这里 + vision_demo_top.CAM_CLK_HZ。
+# 时序瓶颈提示：接入 CNN（vision_top 的 USE_CNN=1）后，关键路径变成
+#   vision_cnn_top 的卷积地址递推 + PE 阵列出结果那一拍，不再是「32 位减法/比较」；
+#   若有负 slack，先退 PE 并行度或给量化加一级流水（见 AI 方案 R3）。
+create_clock -name clk -period 37.037 [get_ports {clk}]
+
+# 图像源时钟（PIXCLK）：★ 待决策——OV5640(按 25MHz) 或 HDMI 输入(MS7200，频率随 HDMI 源)。
+#   当前按 OV5640 25MHz (40 ns) 保留；决策后改端口名与频率。
+create_clock -name cam_pclk -period 40.000 [get_ports {cam_pclk}]
+
+#-----------------------------------------------------------------------------
+# 【并入】跨时钟域：两个时钟声明为异步组
+#-----------------------------------------------------------------------------
+# 设计里跨域只有这三处，全部是「翻转握手 + 打两拍」：
+#   1) cfg_toggle  clk      -> cam_pclk   配置下发
+#   2) res_toggle  cam_pclk -> clk        帧结果
+#   3) pix_toggle  cam_pclk -> clk        （CNN 阶段的 32x32 小图就绪，见 AI 方案 §4.5）
+# 打两拍的寄存器都做了 set_false_path 之外的余量设计（数据在 toggle 之前早于两拍稳定），
+# 所以整组异步是安全的。
+set_clock_groups -asynchronous -group [get_clocks {clk}] -group [get_clocks {cam_pclk}]
+
+# 如果希望更保守（不做整组异步），可以把上面那句注释掉，改用下面两条逐条豁免：
+# set_false_path -from [get_clocks {cam_pclk}] -to [get_clocks {clk}]
+# set_false_path -from [get_clocks {clk}] -to [get_clocks {cam_pclk}]
+
+#-----------------------------------------------------------------------------
+# DVP 输入：相对 cam_pclk 的建立/保持
+#-----------------------------------------------------------------------------
+# ★ 待核对：OV5640 模组的 DVP 输出时序（tSU/tH）与板级走线延迟。
+#   下面这两组是「先按半个周期、等长走线」的保守起点，拿到模组手册后按实测收紧。
+#   -max 8ns（半个周期）是建立时间裕量；
+#   -min 3ns 是数据保持声明：PDS 慢角下 cam_pclk 域 Hold 需 -min ≥ 2.55ns 才收敛，
+#   取 3ns 留裕量（DVP 数据沿后保持 3ns 是常规值，上板后按实测调整）。
+set_input_delay -clock cam_pclk -max 8.000 [get_ports {cam_vsync cam_href cam_data[*]}]
+set_input_delay -clock cam_pclk -min 3.000 [get_ports {cam_vsync cam_href cam_data[*]}]
+
+#-----------------------------------------------------------------------------
+# SCCB（100 kHz 慢速开漏总线）与相机控制脚：不算时序
+#-----------------------------------------------------------------------------
+# SCL 由 clk 分频得到（100 kHz，远慢于任何时钟），SDA 是外部上拉的开漏总线，
+# 其翻转与内部逻辑无关，属于典型「慢速异步 IO」，做时序分析没有意义。
+set_false_path -from [get_ports {cam_sda}]
+set_false_path -to   [get_ports {cam_sda}]
+set_false_path -to   [get_ports {cam_scl}]
+set_false_path -to   [get_ports {cam_pwdn cam_reset_n}]
+
+#-----------------------------------------------------------------------------
+# 异步外部输入（复位）
+#-----------------------------------------------------------------------------
+# rstn_ext 会先经过同步器（vision_demo_top 里的 rst_sync），所以对它本身不做时序要求。
+set_false_path -from [get_ports {rstn_ext}]
+
+#-----------------------------------------------------------------------------
+# 输出：UART / LED
+#-----------------------------------------------------------------------------
+# UART 115200、LED 肉眼指示，外部**没有**采样器在 clk 沿建立数据：
+# 真实外部建立时间需求≈0。这里按 2ns 留裕量声明（PDS 慢角 IOB obuf->pad
+# 路径实测约 6.8ns，5ns 声明值会让 WNS 虚报 -1.1ns 的假违例）。
+# ★ 若将来把 uart/led 接给真实高速外设，再把对应端口收紧到该外设的 tSU。
+set_output_delay -clock clk -max 2.000 [get_ports {uart_txd led_a led_b led_c led_run led_ok led_err}]
+
+#-----------------------------------------------------------------------------
+# 多周期 / 例外（可选，按需打开）
+#-----------------------------------------------------------------------------
+# 顺序除法器 div_u32_seq 是 33 拍迭代，内部是移位-减法链，路径很短；
+# 若综合报它的时序问题，可以按需给到多周期：
+# set_multicycle_path -setup 2 -from [get_cells {u_vis/u_cls/u_div/*}]
+
+#=============================================================================
+# 【物理引脚约束 Io Table】盘古100K MINI (PG2L100H-6IFBG676) 2026-10-12
+#
+# 图像源 = DOUBLE-DVP-OV5640 模组（J17 排针 → 扩展口 J10，pin 对 pin 直插）
+#   J17 脚 37/38=GND、39/40=A3V3_3000MA（模组电源输入，与 J10 39/40 A3V3 对接）
+#   以下 CAM1 单路先上板；CAM2 全路映射见 doc/硬件资源与引脚.md（双目后续）
+# 复位 = KEY0 按键（低有效；demo 内部 POR 上电复位兜底，rstn_raw = rstn_ext & por_n）
+# cam_pwdn 不绑：模组 J17 无 PWDN 脚（自带 24MHz 晶振，XCLK 无需 FPGA 提供）
+# led_err 不绑：LED5+ 手册未列引脚，待原理图；demo 缺省自动分配
+# 电平：J10 扩展口 IO 在 L4/L5 bank（3.3V），UART/LED/KEY 在 L3（3.3V）
+#=============================================================================
+###==== BEGIN Io Table
+define_attribute {p:clk} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:clk} {PAP_IO_LOC} {D18}
+define_attribute {p:clk} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:clk} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:rstn_ext} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:rstn_ext} {PAP_IO_LOC} {C22}
+define_attribute {p:rstn_ext} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:rstn_ext} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_pclk} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_pclk} {PAP_IO_LOC} {L22}
+define_attribute {p:cam_pclk} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_pclk} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_vsync} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_vsync} {PAP_IO_LOC} {L23}
+define_attribute {p:cam_vsync} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_vsync} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_href} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_href} {PAP_IO_LOC} {T25}
+define_attribute {p:cam_href} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_href} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[0]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[0]} {PAP_IO_LOC} {M24}
+define_attribute {p:cam_data[0]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[0]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[1]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[1]} {PAP_IO_LOC} {R22}
+define_attribute {p:cam_data[1]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[1]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[2]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[2]} {PAP_IO_LOC} {K26}
+define_attribute {p:cam_data[2]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[2]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[3]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[3]} {PAP_IO_LOC} {K25}
+define_attribute {p:cam_data[3]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[3]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[4]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[4]} {PAP_IO_LOC} {M25}
+define_attribute {p:cam_data[4]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[4]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[5]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[5]} {PAP_IO_LOC} {N19}
+define_attribute {p:cam_data[5]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[5]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[6]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[6]} {PAP_IO_LOC} {T24}
+define_attribute {p:cam_data[6]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[6]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_data[7]} {PAP_IO_DIRECTION} {Input}
+define_attribute {p:cam_data[7]} {PAP_IO_LOC} {R21}
+define_attribute {p:cam_data[7]} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_data[7]} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_scl} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:cam_scl} {PAP_IO_LOC} {P19}
+define_attribute {p:cam_scl} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_scl} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_sda} {PAP_IO_DIRECTION} {INOUT}
+define_attribute {p:cam_sda} {PAP_IO_LOC} {R20}
+define_attribute {p:cam_sda} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_sda} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:cam_reset_n} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:cam_reset_n} {PAP_IO_LOC} {T22}
+define_attribute {p:cam_reset_n} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:cam_reset_n} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:uart_txd} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:uart_txd} {PAP_IO_LOC} {C24}
+define_attribute {p:uart_txd} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:uart_txd} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:led_a} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led_a} {PAP_IO_LOC} {A20}
+define_attribute {p:led_a} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led_a} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:led_b} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led_b} {PAP_IO_LOC} {C19}
+define_attribute {p:led_b} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led_b} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:led_c} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led_c} {PAP_IO_LOC} {C18}
+define_attribute {p:led_c} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led_c} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:led_run} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led_run} {PAP_IO_LOC} {E18}
+define_attribute {p:led_run} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led_run} {PAP_IO_STANDARD} {LVCMOS33}
+define_attribute {p:led_ok} {PAP_IO_DIRECTION} {Output}
+define_attribute {p:led_ok} {PAP_IO_LOC} {A17}
+define_attribute {p:led_ok} {PAP_IO_VCCIO} {3.3}
+define_attribute {p:led_ok} {PAP_IO_STANDARD} {LVCMOS33}
+###==== END Io Table

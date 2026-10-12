@@ -1,0 +1,126 @@
+# =============================================================================
+# .gitignore —— RISCV 竞赛工程
+# 生成日期：2026-10-12
+#
+# 原则：**只提交源码与文档**，不提交编译产物 / 工具链 / 归档 / 大文件备份。
+# 因为工具链是以 junction 形式指进工程的（1.7 GB），一旦误提交会直接撑爆仓库。
+# =============================================================================
+
+# ---- ★★★ 工具链（junction 指进工程，1.7 GB，绝对不要提交）★★★ ----
+xpack-riscv-none-elf-gcc-15.2.0-1/
+riscv-none-elf/
+**/xpack-riscv-none-elf-gcc-*/
+**/riscv-none-elf/bin/
+**/riscv-none-elf/lib/
+
+# ---- PDS 流程产物 ----
+compile/
+synthesize/
+device_map/
+place_route/
+generate_netlist/
+generate_bitstream/
+generate_netlist_*/
+report_timing/
+report_power/
+report_drc/
+logbackup/
+temp_projects/
+*_dir/
+rev_1/
+work/
+ipcore/**/work/
+ipcore/**/rev_1/
+
+# ---- 日志 ----
+*.log
+*.rpt
+*_fullflow.log
+pds.log
+run.log
+stderr.log
+flow.log
+compile.log
+generate.log
+gen_*.log
+stdout.log
+
+# ---- PDS 中间/二进制产物 ----
+*.adb
+*.prr
+*.prt
+*.rtr
+*.db
+*.bgr
+*.smsk
+*.netlist
+*.plc
+*.pnr
+*.rbf
+*.pof
+*.lock
+*.pds.lock
+*.sbit
+*.sfc
+*.mif.bak
+
+# ---- 仿真产物 ----
+sim/work/
+sim/**/work/
+sim/**/*.vcd
+sim/**/*.wlf
+sim/transcript
+sim/**/transcript
+sim/**/vsim.wlf
+sim/**/modelsim.ini
+*.vcd
+*.wlf
+vs.wlf
+transcript
+
+# ---- 构建产物 ----
+build/
+build_onchip/
+build_versions/
+**/__pycache__/
+*.pyc
+*.pyo
+*.o
+*.elf
+*.bin
+*.dis
+*.map
+*.su
+!*/build_versions/**/manifest.json
+
+# ---- 归档 / 备份 / 大文件 ----
+_archive/
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.rar
+*.bak
+*.before_*
+*.orig
+_stale_*
+
+# ---- 临时排障留痕 ----
+_onchip_hash_*.txt
+_onchip_datahash_*.txt
+_debug_*.log
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+*.swp
+*~
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---- 例外：这些虽然是产物但**必须**进仓库（团队门控要用） ----
+!deliverables/*.sbit
+!deliverables/*.sha256
+!ipcore/**/rtl/*_init_param.v
+!MyCpu_test/coremark_onchip/*.dat
