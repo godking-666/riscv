@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-// RK3568_MES2L100H / PG2L100H-6IFBG484 physical board boundary.
+// Pango MINI-(200H) / PG2L200H-6IFBG676 physical board boundary.
 // Current generated DDR IP: 125 MHz reference, 750 Mbps, core_clk=93.75 MHz.
 module board_top #(
     parameter [31:0] RESET_PC = 32'h0000_0000,
@@ -9,6 +9,10 @@ module board_top #(
     parameter integer SELFTEST_TIMEOUT_CYCLES = CORE_CLK_HZ * 5,
     parameter integer KEY_DEBOUNCE_CYCLES = 2_500_000 // 20 ms at 125 MHz
 ) (
+    input wire camera_pclk, camera_vsync, camera_href,
+    input wire [7:0] camera_data,
+    inout wire camera_scl, camera_sda,
+    output wire camera_resetn,
     input  wire        ddr_ref_clk_p,
     input  wire        ddr_ref_clk_n,
     input  wire        resetn,
@@ -26,39 +30,38 @@ module board_top #(
     output wire        mem_odt,
     output wire [14:0] mem_a,
     output wire [ 2:0] mem_ba,
-    inout  wire [ 1:0] mem_dqs,
-    inout  wire [ 1:0] mem_dqs_n,
-    inout  wire [15:0] mem_dq,
-    output wire [ 1:0] mem_dm,
+    inout  wire [ 3:0] mem_dqs,
+    inout  wire [ 3:0] mem_dqs_n,
+    inout  wire [31:0] mem_dq,
+    output wire [ 3:0] mem_dm,
     output wire        uart_tx,
-    input  wire        uart_rx
+    input  wire        uart_rx,
+    // 通用 GPIO（基础任务）：3 盏空余 LED（C18/E18/A17）+ 4 个空余按键（C23/B22/A22/B20）
+    output wire [1:0]  gpio_led,
+    input  wire [3:0]  gpio_key,
+    // HDMI 输出（彩条里程碑）：27MHz 晶振 + 8 根 TMDS 差分
+    // 引脚取自厂商 5_1 ov5640 的 fdc（已实板验证）
+    input  wire        sys_clk,       // D18  27 MHz
+    output wire        tmds_clk_p,    // N21
+    output wire        tmds_clk_n,    // N22
+    output wire [2:0]  tmds_data_p,   // R25 / P23 / N23
+    output wire [2:0]  tmds_data_n    // P25 / P24 / N24
 );
     wire ddr_ref_clk;
     wire key_ref_clk;
     wire key_resetn;
+    wire camera_pixel_clk;
     wire core_clk;
     wire ddr_init_done;
     wire soc_resetn;
-    // ================================================================
-    // DebugCore / Fabric Inserter 观测点
-    // ----------------------------------------------------------------
-    // 这 5 根线在 board_top 顶层没有负载，ADS 综合会把它们整条链优化掉，
-    // 导致 Fabric Inserter 找不到可插资源、生成的 .fic 为空、
-    // dev_map 报 E: Flow-0037: Fic file is empty.
-    // 加 PAP_MARK_DEBUG 后 ADS 会保留这些 net 并保持 RTL 原名。
-    // 语法依据：Fabric Inserter 用户手册 4.1「在 RTL 中标记信号」。
-    // ================================================================
-    wire [31:0] debug_wb_pc        /* synthesis PAP_MARK_DEBUG="1" */;
-    wire [31:0] debug_inst         /* synthesis PAP_MARK_DEBUG="2" */;
-    wire [ 3:0] debug_wb_rf_we     /* synthesis PAP_MARK_DEBUG="3" */;
-    wire [ 4:0] debug_wb_rf_wnum   /* synthesis PAP_MARK_DEBUG="4" */;
-    wire [31:0] debug_wb_rf_wdata  /* synthesis PAP_MARK_DEBUG="5" */;
-
-    // 若 Fabric Inserter 的 Clock 下拉框里找不到 core_clk，把下面两行注释打开，
-    // 用"精确标记"直接指定 DebugCore0 的 clock / reset 通道
-    // （t=trigger d=data c=clock r=reset）：
-    //   wire core_clk    /* synthesis PAP_MARK_DEBUG="<0/c0/0>" */;
-    //   wire soc_resetn  /* synthesis PAP_MARK_DEBUG="<0/r0/0>" */;
+    wire [7:0] gpio_in, gpio_out, gpio_dir;
+    wire [1:0] dbg_led;   // 临时调试观测
+    wire       gpio_irq;
+    wire [31:0] debug_wb_pc;
+    wire [31:0] debug_inst;
+    wire [ 3:0] debug_wb_rf_we;
+    wire [ 4:0] debug_wb_rf_wnum;
+    wire [31:0] debug_wb_rf_wdata;
 
     // Same port-only instantiation as the generated DDR example test_ddr.v.
     // Electrical standard/termination must be checked against the board
@@ -73,6 +76,10 @@ module board_top #(
         .CLKIN(ddr_ref_clk), .CLKOUT(key_ref_clk)
     );
 
+    GTP_CLKBUFG u_camera_pclk_buf (
+        .CLKIN(camera_pclk), .CLKOUT(camera_pixel_clk)
+    );
+
     // KEY0 asserts reset immediately. Release must remain stable for 20 ms.
     // The input reference keeps running while the DDR PLL/core is in reset.
     reset_button_debounce #(
@@ -84,12 +91,22 @@ module board_top #(
     // Final SoC reset release is still synchronized to core_clk and gated by
     // DDR initialization/PLL lock inside soc_ddr3_top.
     soc_ddr3_top #(
+        .ENABLE_CAMERA(1), .ENABLE_PREPROCESS(1), .ENABLE_CNN(1),
+        .ENABLE_GPIO(1),
+        .CAMERA_COLORBAR_ENABLE(0), // Live scene: PRE-ISP test pattern disabled.
+        .CAMERA_DVP_TEST_ENABLE(0), // Live scene: DVP test generator disabled.
         .RESET_PC(RESET_PC), .DDR_BASE(DDR_BASE),
         .CORE_CLK_HZ(CORE_CLK_HZ),
         .SELFTEST_TIMEOUT_CYCLES(SELFTEST_TIMEOUT_CYCLES)
     ) u_soc (
+        .camera_pclk(camera_pixel_clk), .camera_vsync(camera_vsync), .camera_href(camera_href),
+        .camera_data(camera_data), .camera_scl(camera_scl), .camera_sda(camera_sda),
+        .camera_resetn(camera_resetn),
+
         .ddr_ref_clk(ddr_ref_clk), .resetn(key_resetn),
         .uart_tx(uart_tx), .uart_rx(uart_rx),
+        .gpio_in(gpio_in), .gpio_out(gpio_out),
+        .gpio_dir(gpio_dir), .gpio_irq(gpio_irq),
         .irq_external(1'b0), .irq_software(1'b0), .irq_timer(1'b0),
         .core_clk(core_clk), .ddr_init_done(ddr_init_done),
         .soc_resetn(soc_resetn),
@@ -104,6 +121,23 @@ module board_top #(
         .mem_ras_n(mem_ras_n), .mem_cas_n(mem_cas_n),
         .mem_we_n(mem_we_n), .mem_odt(mem_odt),
         .mem_a(mem_a), .mem_ba(mem_ba), .mem_dm(mem_dm),
-        .mem_dq(mem_dq), .mem_dqs(mem_dqs), .mem_dqs_n(mem_dqs_n)
+        .mem_dq(mem_dq), .mem_dqs(mem_dqs), .mem_dqs_n(mem_dqs_n),
+        .sys_clk(sys_clk),
+        .tmds_clk_p(tmds_clk_p), .tmds_clk_n(tmds_clk_n),
+        .tmds_data_p(tmds_data_p), .tmds_data_n(tmds_data_n),
+        .dbg_led(dbg_led)
     );
+
+    // ---- 通用 GPIO 引脚映射 ----
+    // 输入：KEY1..KEY4（低有效），取反成「按下=1」给软件；高位补 0
+    assign gpio_in  = {4'b0000, ~gpio_key};
+    // 输出：只有 DIR=1 的位才驱动 LED（复位后 DIR=0 -> LED 熄灭，不会漂）
+    // ---- 临时：E18/A17 改为显示通路观测 LED ----
+    //   E18 = 相机是否写过帧（亮=写过，说明相机已 arm）
+    //   A17 = 显示 FIFO 是否为空（亮=显示端没数据）
+    // 恢复 GPIO 功能时把下面一行换回：
+    //     assign gpio_led = gpio_dir[1:0] & gpio_out[1:0];
+    assign gpio_led = dbg_led;
+
+    // ---- HDMI 显示输出：已在 soc_ddr3_top 内走「DDR3 帧 → 异步 FIFO → HDMI」通路 ----
 endmodule

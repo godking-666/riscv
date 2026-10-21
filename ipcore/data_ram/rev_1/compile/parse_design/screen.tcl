@@ -1,0 +1,1 @@
+.rtl_screen -top_module {data_ram} -include_path {<D:/riscv/RISCV/ipcore/data_ram/rev_1>} -design_files {<D:/riscv/RISCV/ipcore/data_ram/rtl/ipm2l_spram_v1_8_data_ram.v|work><D:/riscv/RISCV/ipcore/data_ram/data_ram.v|work>}

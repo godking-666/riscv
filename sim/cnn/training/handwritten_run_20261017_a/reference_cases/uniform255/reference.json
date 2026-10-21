@@ -1,0 +1,46 @@
+{
+  "name": "uniform255",
+  "identity": {
+    "label": null
+  },
+  "layers": {
+    "gray32": {
+      "elements": 1024,
+      "sha256": "b7975b373ba36ffaeae620de5275af2d87e9f7bdf47988d02818b5005d27d7ef"
+    },
+    "conv1": {
+      "elements": 2048,
+      "sha256": "6453a614b7397ccfdee33d118550882b4afecf0c3ce76bb8d91902d314da604c"
+    },
+    "conv2": {
+      "elements": 1024,
+      "sha256": "d48e82f4d891c7e2ee1e878b558384827223d7c2121879ad28acad78a28d57dd"
+    },
+    "conv3": {
+      "elements": 512,
+      "sha256": "35d7b62ceed8ac15e451347894b4a64b56139a3c486abf7f6598a3e4b48ae0d2"
+    },
+    "gap": {
+      "elements": 32,
+      "sha256": "33cbe173715ed97f61f85d5b7e2332ae577b4241dff44ac20bfbe216806fb874"
+    },
+    "scores": {
+      "elements": 10,
+      "sha256": "f8af1319f3f3019f07b0224e213fcc88fbfe1303b58ed93c582e6289c8ed33c6"
+    }
+  },
+  "scores": [
+    -532,
+    288,
+    -213,
+    -215,
+    180,
+    -68,
+    140,
+    -3,
+    -169,
+    209
+  ],
+  "prediction": 1,
+  "rgb96_sha256": "f3ac971cf0d3cf59cb1e194ab3acd9ea1278894dbd47d517f162fab6acd6cfc9"
+}

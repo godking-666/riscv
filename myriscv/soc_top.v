@@ -7,9 +7,14 @@ module soc_top #(
     // 默认让 RAM 跟随测试程序的链接基址；正式上板时可独立覆写。
     parameter [31:0] DATA_RAM_BASE = RESET_PC,
     parameter [31:0] MMIO_BASE = 32'h1000_0000,
+    parameter integer ENABLE_CNN = 0,
+    parameter integer ENABLE_PREPROCESS = 0,
+    parameter integer ENABLE_CAMERA = 0,
     parameter integer ENABLE_DDR = 0,
     parameter [31:0] DDR_BASE = 32'h4000_0000,
     parameter [31:0] DDR_ADDR_MASK = 32'he000_0000,
+    parameter integer DDR_MEM_DQ_WIDTH = 16,
+    parameter integer DDR_POSTED_WRITE_ENABLE = 1,
     parameter integer INST_REQ_STALL_CYCLES = 0,
     parameter integer INST_RSP_DELAY_CYCLES = 0,
     parameter integer DATA_REQ_STALL_CYCLES = 0,
@@ -21,17 +26,37 @@ module soc_top #(
     parameter integer PERF_AUTO_ARM = 1,
     parameter [31:0] PERF_START_PC = 32'h400007d0,
     parameter [31:0] PERF_STOP_PC = 32'h400007f4,
-    // 通用 GPIO（赛题基础任务 3）
-    parameter integer GPIO_WIDTH  = 16,
-    parameter integer ENABLE_GPIO = 1,
-    parameter [31:0]  GPIO_BASE   = 32'h1000_2000,
-    // 视觉子系统（接口契约 v1.0）：0x8000_0000 起 4 KiB，必须不可缓存
-    parameter integer ENABLE_VISION = 0,
-    parameter [31:0]  VISION_BASE   = 32'h8000_0000,
-    // ★ 必须等于实际 core_clk（27MHz 直驱时传 27_000_000；切 54/108MHz 时同步改）
-    parameter integer CAM_CLK_HZ    = 27_000_000,
-    parameter integer CAM_SCL_HZ    = 100_000
+    // Camera builds keep registered load data; posted store ACKs may bypass it.
+    parameter integer DDR_POSTED_STORE_ACK_BYPASS_ENABLE = 1,
+    parameter integer PERF_DIAG_ENABLE = 1,
+    parameter integer PERF_DETAIL_ENABLE = 1,
+    // 通用 GPIO（赛题基础任务：集成 UART 之外的 GPIO 外设）
+    parameter integer GPIO_WIDTH = 8,
+    parameter integer ENABLE_GPIO = 0,
+    parameter [31:0] GPIO_BASE = 32'h1000_5000
 ) (
+    output wire cnn_req_valid, cnn_req_write,
+    output wire [1:0] cnn_req_size,
+    output wire [31:0] cnn_req_addr, cnn_req_wdata,
+    output wire [3:0] cnn_req_wstrb,
+    input wire cnn_req_ready, cnn_rsp_valid, cnn_rsp_error,
+    input wire [31:0] cnn_rsp_rdata,
+    output wire pp_req_valid, pp_req_write,
+    output wire [1:0] pp_req_size,
+    output wire [31:0] pp_req_addr, pp_req_wdata,
+    output wire [3:0] pp_req_wstrb,
+    input wire pp_req_ready, pp_rsp_valid, pp_rsp_error,
+    input wire [31:0] pp_rsp_rdata,
+    input wire preprocess_busy, preprocess_done,
+    output wire cam_req_valid, cam_req_write,
+    output wire [1:0] cam_req_size,
+    output wire [31:0] cam_req_addr, cam_req_wdata,
+    output wire [3:0] cam_req_wstrb,
+    input wire cam_req_ready, cam_rsp_valid, cam_rsp_error,
+    input wire [31:0] cam_rsp_rdata,
+    input wire camera_busy,
+    input wire camera_dual_mode,
+    input wire [1:0] camera_cpu_owned,
     input  wire        clk,
     input  wire        resetn,
     input  wire        irq_external,
@@ -51,8 +76,8 @@ module soc_top #(
     output wire [ 3:0] ddr_axi_awlen,
     input  wire        ddr_axi_awready,
     output wire        ddr_axi_awvalid,
-    output wire [127:0] ddr_axi_wdata,
-    output wire [15:0] ddr_axi_wstrb,
+    output wire [8*DDR_MEM_DQ_WIDTH-1:0] ddr_axi_wdata,
+    output wire [DDR_MEM_DQ_WIDTH-1:0] ddr_axi_wstrb,
     input  wire        ddr_axi_wready,
     input  wire [ 3:0] ddr_axi_wusero_id,
     input  wire        ddr_axi_wusero_last,
@@ -62,41 +87,29 @@ module soc_top #(
     output wire [ 3:0] ddr_axi_arlen,
     input  wire        ddr_axi_arready,
     output wire        ddr_axi_arvalid,
-    input  wire [127:0] ddr_axi_rdata,
+    input  wire [8*DDR_MEM_DQ_WIDTH-1:0] ddr_axi_rdata,
     input  wire [ 3:0] ddr_axi_rid,
     input  wire        ddr_axi_rlast,
     input  wire        ddr_axi_rvalid,
     output wire [ 1:0] selftest_status,
     input  wire        uart_rx,
     output wire        uart_tx,
-
-    // 通用 GPIO（基础任务 3）。板级顶层用它驱动板载 LED / 读取按键；
-    // 建议接法：只看 gpio_dir[i]=1 的位由 GPIO 驱动，其余位保留 soc_ddr3_leds 的硬件指示。
+    // 通用 GPIO 引脚
     input  wire [GPIO_WIDTH-1:0] gpio_in,
     output wire [GPIO_WIDTH-1:0] gpio_out,
     output wire [GPIO_WIDTH-1:0] gpio_dir,
-    output wire         gpio_irq,
-
-    // ---- 视觉子系统 / OV5640 DVP（接口契约 v1.0）----
-    // 摄像头：模组自带 24MHz 晶振，FPGA 不供 XCLK；cam_pwdn 模组无此脚，可悬空。
-    input  wire         cam_pclk,      // L22
-    input  wire         cam_vsync,     // L23
-    input  wire         cam_href,      // T25
-    input  wire [7:0]   cam_data,      // M24 R22 K26 K25 M25 N19 T24 R21
-    inout  wire         cam_sda,       // R20（SCCB，开漏，vision_top 内部拉低/释放）
-    output wire         cam_scl,       // P19
-    output wire         cam_pwdn,
-    output wire         cam_reset_n,   // T22（低有效，接模组 REST）
-    // 视觉状态
-    output wire         vis_irq,       // 电平中断 = IRQ_EN && DONE
-    output wire         vis_led_a,     // A 类指示
-    output wire         vis_led_b,     // B 类指示
-    output wire         vis_led_c      // C 类指示
+    output wire        gpio_irq
 );
 
     // CPU 使用字节地址；ROM/RAM IP 使用 32 位字地址。
     wire [7:0] perf_events;
     wire [31:0] perf_branch_target, perf_fetch_pc;
+    wire [5:0] perf_cache_events;
+    wire [1:0] perf_cache_enabled;
+    wire [2:0] perf_wait_events;
+    wire [15:0] perf_detail_cpu, perf_detail_bridge;
+    wire [14:0] perf_diag_flags;
+    wire [31:0] perf_diag_target_pc, perf_diag_pending_pc, perf_diag_buffer_pc;
     wire        inst_req_valid;
     wire [31:0] inst_req_addr;
     wire        inst_req_ready;
@@ -130,7 +143,7 @@ module soc_top #(
     wire        uart_irq;
     // Preserve the existing generic external source; board_top ties it low.
     // UART is synchronous to this same core_clk domain and holds a level.
-    wire        cpu_irq_external = irq_external | uart_irq;
+    wire        cpu_irq_external = irq_external | uart_irq | gpio_irq;
 
     wire        ram_bus_req_valid;
     wire        ram_bus_req_write;
@@ -153,6 +166,9 @@ module soc_top #(
     wire        data_ddr_rsp_valid;
     wire [31:0] data_ddr_rsp_rdata;
     wire        data_ddr_rsp_error;
+    wire        ddr_write_buffer_busy;
+    localparam integer DDR_WRITE_ORDER_ACTIVE = (ENABLE_DDR != 0) &&
+                          (DDR_MEM_DQ_WIDTH == 32) && (DDR_POSTED_WRITE_ENABLE != 0);
 
     wire        mmio_req_valid;
     wire        mmio_req_write;
@@ -171,25 +187,11 @@ module soc_top #(
     wire [3:0] uart_req_wstrb;
     wire uart_rsp_valid, uart_rsp_error;
 
-    // 视觉子系统从端（接口契约 v1.0，0x8000_0000 起 4 KiB）。
-    // 当前 ENABLE_VISION 未使能，从端在其中被永久终止：
-    // 视觉模块就绪后，把下面 4 个输入改接 vision_top 的对应输出即可，
-    // 并把 ENABLE_VISION 参数在例化时置 1。
-    wire        vision_req_valid;
-    wire        vision_req_write;
-    wire [ 1:0] vision_req_size;
-    wire [31:0] vision_req_addr, vision_req_wdata;
-    wire [ 3:0] vision_req_wstrb;
-    wire [31:0] vision_bus_rdata;   // vision_top 的寄存读数据（1 拍后有效）
-
-    // 通用 GPIO 从端（0x1000_2000 起 32 字节）
-    wire        gpio_req_valid;
-    wire        gpio_req_write;
-    wire [ 1:0] gpio_req_size;
-    wire [31:0] gpio_req_addr, gpio_req_wdata;
-    wire [ 3:0] gpio_req_wstrb;
-    wire        gpio_req_ready, gpio_rsp_valid, gpio_rsp_error;
-    wire [31:0] gpio_rsp_rdata;
+    wire gpio_req_valid, gpio_req_write, gpio_req_ready;
+    wire [1:0] gpio_req_size;
+    wire [31:0] gpio_req_addr, gpio_req_wdata, gpio_rsp_rdata;
+    wire [3:0] gpio_req_wstrb;
+    wire gpio_rsp_valid, gpio_rsp_error;
 
     wire [11:0] data_ram_addr;
     wire [31:0] data_ram_wdata;
@@ -211,13 +213,17 @@ module soc_top #(
     assign data_write = data_req_valid && data_req_ready &&  data_req_write;
 
     mycpu_sync #(
-        .RESET_PC(RESET_PC)
+        .RESET_PC(RESET_PC),
+        .EXTERNAL_MEM_DRAIN_ENABLE(DDR_WRITE_ORDER_ACTIVE),
+        .DIAG_PERF_ENABLE((PERF_ENABLE != 0) && (PERF_DIAG_ENABLE != 0)),
+        .DETAIL_PERF_ENABLE((PERF_ENABLE != 0) && (PERF_DIAG_ENABLE != 0) && (PERF_DETAIL_ENABLE != 0))
     ) u_cpu (
         .clk               (clk),
         .resetn            (resetn),
         .irq_external      (cpu_irq_external),
         .irq_software      (irq_software),
         .irq_timer         (irq_timer),
+        .memory_order_busy (ddr_write_buffer_busy),
         .inst_req_valid    (inst_req_valid),
         .inst_req_addr     (inst_req_addr),
         .inst_req_ready    (inst_req_ready),
@@ -239,10 +245,15 @@ module soc_top #(
         .debug_wb_rf_wnum  (debug_wb_rf_wnum),
         .debug_wb_rf_wdata (debug_wb_rf_wdata),
         .debug_inst        (debug_inst),
-        .perf_events(perf_events), .perf_branch_target(perf_branch_target), .perf_fetch_pc(perf_fetch_pc)
+        .perf_events(perf_events), .perf_branch_target(perf_branch_target), .perf_fetch_pc(perf_fetch_pc),
+        .perf_diag_flags(perf_diag_flags), .perf_diag_target_pc(perf_diag_target_pc),
+        .perf_diag_pending_pc(perf_diag_pending_pc), .perf_diag_buffer_pc(perf_diag_buffer_pc),
+        .perf_detail_cpu(perf_detail_cpu)
     );
 
     inst_bus_interconnect #(
+        .ENABLE_PREPROCESS(ENABLE_PREPROCESS),
+        .ENABLE_CAMERA (ENABLE_CAMERA),
         .ROM_BASE      (INST_ROM_BASE),
         .ROM_ADDR_MASK (32'hffff_c000),
         .ENABLE_DDR     (ENABLE_DDR),
@@ -298,6 +309,9 @@ module soc_top #(
     );
 
     data_bus_interconnect #(
+        .ENABLE_CNN(ENABLE_CNN),
+        .ENABLE_PREPROCESS(ENABLE_PREPROCESS),
+        .ENABLE_CAMERA (ENABLE_CAMERA),
         .RAM_BASE      (DATA_RAM_BASE),
         .RAM_ADDR_MASK (32'hffff_c000),
         .MMIO_BASE     (MMIO_BASE),
@@ -307,13 +321,32 @@ module soc_top #(
         .DDR_ADDR_MASK (DDR_ADDR_MASK),
         .ENABLE_UART   (1),
         .UART_BASE     (UART_BASE),
-        .ENABLE_VISION (ENABLE_VISION),
-        .VISION_BASE   (VISION_BASE),
+        .DDR_WRITE_ORDER_ENABLE(DDR_WRITE_ORDER_ACTIVE),
         .ENABLE_GPIO   (ENABLE_GPIO),
         .GPIO_BASE     (GPIO_BASE)
     ) u_data_bus_interconnect (
+        .cnn_req_valid(cnn_req_valid), .cnn_req_write(cnn_req_write),
+        .cnn_req_size(cnn_req_size), .cnn_req_addr(cnn_req_addr),
+        .cnn_req_wdata(cnn_req_wdata), .cnn_req_wstrb(cnn_req_wstrb),
+        .cnn_req_ready(cnn_req_ready), .cnn_rsp_valid(cnn_rsp_valid),
+        .cnn_rsp_error(cnn_rsp_error), .cnn_rsp_rdata(cnn_rsp_rdata),
+        .pp_req_valid(pp_req_valid), .pp_req_write(pp_req_write),
+        .pp_req_size(pp_req_size), .pp_req_addr(pp_req_addr),
+        .pp_req_wdata(pp_req_wdata), .pp_req_wstrb(pp_req_wstrb),
+        .pp_req_ready(pp_req_ready), .pp_rsp_valid(pp_rsp_valid),
+        .pp_rsp_error(pp_rsp_error), .pp_rsp_rdata(pp_rsp_rdata),
+        .preprocess_busy(preprocess_busy), .preprocess_done(preprocess_done),
+        .cam_req_valid(cam_req_valid), .cam_req_write(cam_req_write),
+        .cam_req_size(cam_req_size), .cam_req_addr(cam_req_addr),
+        .cam_req_wdata(cam_req_wdata), .cam_req_wstrb(cam_req_wstrb),
+        .cam_req_ready(cam_req_ready), .cam_rsp_valid(cam_rsp_valid),
+        .cam_rsp_error(cam_rsp_error), .cam_rsp_rdata(cam_rsp_rdata),
+        .camera_busy(camera_busy),
+        .camera_dual_mode(camera_dual_mode), .camera_cpu_owned(camera_cpu_owned),
+
         .clk            (clk),
         .resetn         (resetn),
+        .ddr_write_buffer_busy(ddr_write_buffer_busy),
         .m_req_valid    (data_req_valid),
         .m_req_write    (data_req_write),
         .m_req_size     (data_req_size),
@@ -359,20 +392,42 @@ module soc_top #(
         .uart_req_wdata(uart_req_wdata), .uart_req_wstrb(uart_req_wstrb),
         .uart_req_ready(uart_req_ready), .uart_rsp_valid(uart_rsp_valid),
         .uart_rsp_rdata(uart_rsp_rdata), .uart_rsp_error(uart_rsp_error),
-        // 视觉从端：ENABLE_VISION=1 时接 vision_top（见文件末尾的 generate 块）；
-        // =0 时该从端在互连里永不选中，vision_bus_rdata 保持 0。
-        .vision_req_valid(vision_req_valid), .vision_req_write(vision_req_write),
-        .vision_req_size (vision_req_size),  .vision_req_addr (vision_req_addr),
-        .vision_req_wdata(vision_req_wdata), .vision_req_wstrb(vision_req_wstrb),
-        .vision_req_ready(1'b1), .vision_rsp_valid(1'b1),
-        .vision_rsp_rdata(vision_bus_rdata), .vision_rsp_error(1'b0),
-        // 通用 GPIO 从端（ENABLE_GPIO 默认 0，同样先终止以避免悬空）
+        // 通用 GPIO 从端
         .gpio_req_valid(gpio_req_valid), .gpio_req_write(gpio_req_write),
         .gpio_req_size (gpio_req_size),  .gpio_req_addr (gpio_req_addr),
         .gpio_req_wdata(gpio_req_wdata), .gpio_req_wstrb(gpio_req_wstrb),
         .gpio_req_ready(gpio_req_ready), .gpio_rsp_valid(gpio_rsp_valid),
         .gpio_rsp_rdata(gpio_rsp_rdata), .gpio_rsp_error(gpio_rsp_error)
     );
+
+    // CNN integration increases placement pressure. Break the synchronous RAM
+    // QA -> response mux -> load forwarding -> branch -> instruction ROM path.
+    // Delay the ENTIRE response (including store acknowledgements) one cycle;
+    // the interconnect retains its owner until this registered response arrives.
+    wire ram_raw_rsp_valid, ram_raw_rsp_error;
+    wire [31:0] ram_raw_rsp_rdata;
+    generate if (ENABLE_CNN != 0) begin : g_cnn_ram_rsp_register
+        (* syn_preserve=1 *) reg valid_q;
+        (* syn_preserve=1 *) reg [31:0] data_q;
+        reg error_q;
+        always @(posedge clk) begin
+            if (!resetn) begin valid_q<=0; data_q<=0; error_q<=0; end
+            else begin
+                valid_q<=ram_raw_rsp_valid;
+                if (ram_raw_rsp_valid) begin
+                    data_q<=ram_raw_rsp_rdata;
+                    error_q<=ram_raw_rsp_error;
+                end
+            end
+        end
+        assign ram_bus_rsp_valid=valid_q;
+        assign ram_bus_rsp_rdata=data_q;
+        assign ram_bus_rsp_error=error_q;
+    end else begin : g_direct_ram_rsp
+        assign ram_bus_rsp_valid=ram_raw_rsp_valid;
+        assign ram_bus_rsp_rdata=ram_raw_rsp_rdata;
+        assign ram_bus_rsp_error=ram_raw_rsp_error;
+    end endgenerate
 
     data_bram_adapter #(
         .RAM_ADDR_WIDTH(12),
@@ -388,9 +443,9 @@ module soc_top #(
         .req_wdata  (ram_bus_req_wdata),
         .req_wstrb  (ram_bus_req_wstrb),
         .req_ready  (ram_bus_req_ready),
-        .rsp_valid  (ram_bus_rsp_valid),
-        .rsp_rdata  (ram_bus_rsp_rdata),
-        .rsp_error  (ram_bus_rsp_error),
+        .rsp_valid  (ram_raw_rsp_valid),
+        .rsp_rdata  (ram_raw_rsp_rdata),
+        .rsp_error  (ram_raw_rsp_error),
         .ram_addr   (data_ram_addr),
         .ram_wdata  (data_ram_wdata),
         .ram_wstrb  (data_ram_wstrb),
@@ -408,7 +463,11 @@ module soc_top #(
         .rd_data    (data_ram_rdata)
     );
 
-    simple_mmio #(.PERF_ENABLE(PERF_ENABLE), .PERF_AUTO_ARM(PERF_AUTO_ARM),
+    simple_mmio #(.PERF_ENABLE(PERF_ENABLE),
+        .DETAIL_PERF_ENABLE((PERF_ENABLE != 0) && (PERF_DIAG_ENABLE != 0) && (PERF_DETAIL_ENABLE != 0)),
+        .DIAG_PERF_ENABLE((PERF_ENABLE != 0) && (PERF_DIAG_ENABLE != 0)),
+        .DIAG_DDR_ENABLE(ENABLE_DDR),
+        .CACHE_PERF_ENABLE((PERF_ENABLE != 0) && (ENABLE_DDR != 0)), .PERF_AUTO_ARM(PERF_AUTO_ARM),
         .PERF_START_PC(PERF_START_PC), .PERF_STOP_PC(PERF_STOP_PC)) u_simple_mmio (
         .clk       (clk),
         .resetn    (resetn),
@@ -426,21 +485,12 @@ module soc_top #(
         .perf_events(perf_events), .perf_retire_pc(debug_wb_pc),
         .perf_branch_target(perf_branch_target), .perf_fetch_pc(perf_fetch_pc),
         .perf_ar_fire(ddr_axi_arvalid && ddr_axi_arready),
-        .perf_aw_fire(ddr_axi_awvalid && ddr_axi_awready)
-    );
-
-    // 通用 GPIO（赛题基础任务 3："集成基础外设（如 UART 控制器、GPIO 等）"）。
-    // ENABLE_GPIO=0 时互连永不选中本从端，模块处于空闲；引脚输出保持 0，
-    // 板级顶层可据此把 LED 交还给 soc_ddr3_leds 的硬件状态指示。
-    gpio_mmio #(.GPIO_WIDTH(GPIO_WIDTH)) u_gpio_mmio (
-        .clk(clk), .resetn(resetn),
-        .req_valid(gpio_req_valid), .req_write(gpio_req_write),
-        .req_size (gpio_req_size),  .req_addr (gpio_req_addr),
-        .req_wdata(gpio_req_wdata), .req_wstrb(gpio_req_wstrb),
-        .req_ready(gpio_req_ready), .rsp_valid(gpio_rsp_valid),
-        .rsp_rdata(gpio_rsp_rdata), .rsp_error(gpio_rsp_error),
-        .gpio_in (gpio_in), .gpio_out(gpio_out), .gpio_dir(gpio_dir),
-        .gpio_irq(gpio_irq)
+        .perf_aw_fire(ddr_axi_awvalid && ddr_axi_awready),
+        .perf_cache_events(perf_cache_events), .perf_cache_enabled(perf_cache_enabled),
+        .perf_wait_events(perf_wait_events), .perf_diag_flags(perf_diag_flags),
+        .perf_diag_target_pc(perf_diag_target_pc), .perf_diag_pending_pc(perf_diag_pending_pc),
+        .perf_diag_buffer_pc(perf_diag_buffer_pc),
+        .perf_detail_cpu(perf_detail_cpu), .perf_detail_bridge(perf_detail_bridge)
     );
 
     uart_mmio #(.CLK_HZ(UART_CLK_HZ), .RSP_DELAY_CYCLES(UART_RSP_DELAY_CYCLES)) u_uart_mmio (
@@ -452,12 +502,100 @@ module soc_top #(
         .uart_rx(uart_rx), .uart_tx(uart_tx), .uart_irq(uart_irq)
     );
 
+    // 通用 GPIO（基础任务）。从端时序与 uart_mmio 一致：片选+写使能在 posedge
+    // 提交，读数据寄存输出 1 拍后有效，不插入等待周期。
+    gpio_mmio #(.GPIO_WIDTH(GPIO_WIDTH)) u_gpio_mmio (
+        .clk(clk), .resetn(resetn),
+        .req_valid(gpio_req_valid), .req_write(gpio_req_write),
+        .req_size (gpio_req_size),  .req_addr (gpio_req_addr),
+        .req_wdata(gpio_req_wdata), .req_wstrb(gpio_req_wstrb),
+        .req_ready(gpio_req_ready), .rsp_valid(gpio_rsp_valid),
+        .rsp_rdata(gpio_rsp_rdata), .rsp_error(gpio_rsp_error),
+        .gpio_in(gpio_in), .gpio_out(gpio_out), .gpio_dir(gpio_dir),
+        .gpio_irq(gpio_irq)
+    );
+
     generate
         if (ENABLE_DDR != 0) begin : g_ddr
-            dual_sram_to_pango_ddr_bridge u_ddr_bridge (
+            wire bridge_data_rsp_valid, bridge_data_rsp_error;
+            wire [31:0] bridge_data_rsp_rdata;
+            if (ENABLE_CAMERA != 0) begin : g_camera_data_rsp_register
+                // Keep the D-cache DRM -> load forwarding -> ID branch -> I-ROM
+                // timing cut. Only posted store ACKs, which carry no load data,
+                // bypass this stage. Their order still comes from the write buffer.
+                // Latch the type at the BRIDGE acceptance edge: live req_write
+                // may already describe a younger load when the old ACK arrives.
+                localparam integer FAST_STORE_ACK_ACTIVE = DDR_WRITE_ORDER_ACTIVE &&
+                                              (DDR_POSTED_STORE_ACK_BYPASS_ENABLE != 0);
+                reg response_is_posted_store_q;
+                wire fast_store_ack = response_is_posted_store_q && bridge_data_rsp_valid;
+                wire accept_fast_store = FAST_STORE_ACK_ACTIVE &&
+                                          data_ddr_req_valid && data_ddr_req_ready && data_ddr_req_write;
+                always @(posedge clk) begin
+                    if (!resetn)
+                        response_is_posted_store_q <= 1'b0;
+                    else if (data_ddr_req_valid && data_ddr_req_ready)
+                        response_is_posted_store_q <= FAST_STORE_ACK_ACTIVE && data_ddr_req_write;
+                end
+
+                // The upstream interconnect has one outstanding request and
+                // retains its owner until the selected response is consumed.
+                // A delayed load response cannot overlap a younger store ACK:
+                // that store is accepted no earlier than the load consumption
+                // edge, and the bridge responds at least one edge after acceptance.
+                (* syn_preserve=1 *) reg valid_q;
+                (* syn_preserve=1 *) reg [31:0] data_q;
+                reg error_q;
+                always @(posedge clk) begin
+                    if (!resetn) begin
+                        valid_q <= 1'b0;
+                        data_q <= 32'b0;
+                        error_q <= 1'b0;
+                    end else begin
+                        // A fast ACK must never reappear as a delayed response.
+                        valid_q <= bridge_data_rsp_valid && !response_is_posted_store_q;
+                        // Prepare the zero store payload at acceptance, not via
+                        // a mux after data_q on the load-forwarding/branch path.
+                        // On load-response/store-accept turnover, the consumer
+                        // samples OLD data_q at this edge before it becomes zero.
+                        // Single-outstanding ownership forbids a younger store
+                        // acceptance while an older raw load awaits this register.
+                        if (accept_fast_store)
+                            data_q <= 32'b0;
+                        else if (bridge_data_rsp_valid && !response_is_posted_store_q)
+                            data_q <= bridge_data_rsp_rdata;
+                        if (bridge_data_rsp_valid && !response_is_posted_store_q) begin
+                            error_q <= bridge_data_rsp_error;
+                        end
+                    end
+                end
+                assign data_ddr_rsp_valid = valid_q || fast_store_ack;
+                // Data is always registered, including the zero fast-store ACK.
+                // The response owner only selects valid/error, never rdata.
+                assign data_ddr_rsp_rdata = data_q;
+                assign data_ddr_rsp_error = response_is_posted_store_q ? bridge_data_rsp_error : error_q;
+            end else begin : g_direct_data_rsp
+                assign data_ddr_rsp_valid = bridge_data_rsp_valid;
+                assign data_ddr_rsp_rdata = bridge_data_rsp_rdata;
+                assign data_ddr_rsp_error = bridge_data_rsp_error;
+            end
+            dual_sram_to_pango_ddr_bridge #(
+                .PREPROCESS_UNCACHED_ENABLE(ENABLE_PREPROCESS),
+                .CAMERA_UNCACHED_ENABLE(ENABLE_CAMERA),
+                .MEM_DQ_WIDTH(DDR_MEM_DQ_WIDTH),
+                .POSTED_WRITE_ENABLE(DDR_WRITE_ORDER_ACTIVE),
+                .CACHE_PERF_ENABLE(PERF_ENABLE),
+                .DETAIL_PERF_ENABLE((PERF_ENABLE != 0) && (PERF_DIAG_ENABLE != 0) && (PERF_DETAIL_ENABLE != 0)),
+                .DIAG_PERF_ENABLE((PERF_ENABLE != 0) && (PERF_DIAG_ENABLE != 0))
+            ) u_ddr_bridge (
                 .clk              (clk),
                 .resetn           (resetn),
                 .ddr_init_done    (ddr_init_done),
+                .write_buffer_busy(ddr_write_buffer_busy),
+                .perf_cache_events(perf_cache_events),
+                .perf_cache_enabled(perf_cache_enabled),
+                .perf_wait_events(perf_wait_events),
+                .perf_detail_bridge(perf_detail_bridge),
                 .inst_req_valid   (inst_ddr_req_valid),
                 .inst_req_addr    (inst_ddr_req_addr),
                 .inst_req_ready   (inst_ddr_req_ready),
@@ -471,9 +609,9 @@ module soc_top #(
                 .data_req_wdata   (data_ddr_req_wdata),
                 .data_req_wstrb   (data_ddr_req_wstrb),
                 .data_req_ready   (data_ddr_req_ready),
-                .data_rsp_valid   (data_ddr_rsp_valid),
-                .data_rsp_rdata   (data_ddr_rsp_rdata),
-                .data_rsp_error   (data_ddr_rsp_error),
+                .data_rsp_valid   (bridge_data_rsp_valid),
+                .data_rsp_rdata   (bridge_data_rsp_rdata),
+                .data_rsp_error   (bridge_data_rsp_error),
                 .axi_awaddr       (ddr_axi_awaddr),
                 .axi_awuser_ap    (ddr_axi_awuser_ap),
                 .axi_awuser_id    (ddr_axi_awuser_id),
@@ -497,6 +635,11 @@ module soc_top #(
                 .axi_rvalid       (ddr_axi_rvalid)
             );
         end else begin : g_no_ddr
+            assign perf_detail_bridge = 16'b0;
+            assign perf_cache_events = 6'b0;
+            assign perf_cache_enabled = 2'b0;
+            assign perf_wait_events = 3'b0;
+            assign ddr_write_buffer_busy = 1'b0;
             assign inst_ddr_req_ready = 1'b0;
             assign inst_ddr_rsp_valid = 1'b0;
             assign inst_ddr_rsp_rdata = 32'b0;
@@ -510,68 +653,13 @@ module soc_top #(
             assign ddr_axi_awuser_id  = 4'b0;
             assign ddr_axi_awlen      = 4'b0;
             assign ddr_axi_awvalid    = 1'b0;
-            assign ddr_axi_wdata      = 128'b0;
-            assign ddr_axi_wstrb      = 16'b0;
+            assign ddr_axi_wdata      = {(8*DDR_MEM_DQ_WIDTH){1'b0}};
+            assign ddr_axi_wstrb      = {DDR_MEM_DQ_WIDTH{1'b0}};
             assign ddr_axi_araddr     = 28'b0;
             assign ddr_axi_aruser_ap  = 1'b0;
             assign ddr_axi_aruser_id  = 4'b0;
             assign ddr_axi_arlen      = 4'b0;
             assign ddr_axi_arvalid    = 1'b0;
-        end
-    endgenerate
-
-    // ================================================================
-    // 视觉子系统 vision_top（接口契约 v1.0）
-    // ----------------------------------------------------------------
-    // 从端时序与 inst_rom/data_ram 一致：bus_sel && bus_we 在 posedge 提交，
-    // bus_rdata 寄存输出、1 拍后有效，**从不插入等待周期**。
-    // 因此 ENABLE_VISION=1 也不会拖累 CoreMark 与主频 —— 只有软件主动读写
-    // 视觉寄存器时才占总线。
-    //
-    // ★ CAM_CLK_HZ 必须等于实际 core_clk！vision_top 的默认值是 93_750_000
-    //   （旧板假设），传错会导致 SCCB 分频错 -> 摄像头配不上、串口乱码。
-    //
-    // ★ 将来加 D-Cache 时，命中判定必须排除 0x8000_0000~0x8000_0FFF
-    //   （契约 §3.1，一个区间比较器即可）。当前 CPU 还没有 D-Cache，无需处理。
-    // ================================================================
-    generate
-        if (ENABLE_VISION != 0) begin : g_vision
-            vision_top #(
-                .CAM_CLK_HZ          (CAM_CLK_HZ),
-                .CAM_SCL_HZ          (CAM_SCL_HZ),
-                .CAM_PWDN_SETTLE_MS  (10),
-                .CAM_RESET_SETTLE_MS (20),
-                .BYTES_PER_PIX       (2)
-            ) u_vision (
-                .clk         (clk),
-                .rstn        (resetn),
-                .cam_pclk    (cam_pclk),
-                .cam_vsync   (cam_vsync),
-                .cam_href    (cam_href),
-                .cam_data    (cam_data),
-                .cam_sda     (cam_sda),
-                .cam_scl     (cam_scl),
-                .cam_pwdn    (cam_pwdn),
-                .cam_reset_n (cam_reset_n),
-                .bus_sel     (vision_req_valid),
-                .bus_we      (vision_req_write),
-                .bus_addr    (vision_req_addr),
-                .bus_wdata   (vision_req_wdata),
-                .bus_be      (vision_req_wstrb),
-                .bus_rdata   (vision_bus_rdata),
-                .irq         (vis_irq),
-                .led_a       (vis_led_a),
-                .led_b       (vis_led_b),
-                .led_c       (vis_led_c)
-            );
-        end else begin : g_no_vision
-            assign cam_scl     = 1'b0;
-            assign cam_pwdn    = 1'b0;
-            assign cam_reset_n = 1'b0;
-            assign vis_irq     = 1'b0;
-            assign vis_led_a   = 1'b0;
-            assign vis_led_b   = 1'b0;
-            assign vis_led_c   = 1'b0;
         end
     endgenerate
 

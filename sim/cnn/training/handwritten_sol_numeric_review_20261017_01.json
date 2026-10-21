@@ -1,0 +1,22 @@
+{
+  "status": "CHECKPOINT_EXPORT_AND_FULL_SPLIT_INTEGER_QAT_SCORE_REPLAY_PASS",
+  "device": "CPU audit only; no training",
+  "model_id": "4c8b5aca",
+  "checkpoint_epoch": 9,
+  "checkpoint_export_parameters_equal": true,
+  "splits": {
+    "validation": {
+      "samples": 1067,
+      "all_scores_equal": true,
+      "score_elements": 10670,
+      "correct": 1054
+    },
+    "test": {
+      "samples": 1069,
+      "all_scores_equal": true,
+      "score_elements": 10690,
+      "correct": 1045
+    }
+  },
+  "sealed_manifest_sha256": "84182b2c448f17a175b819492a35ae222b9bd312d374307588f0c2f979fedc0a"
+}

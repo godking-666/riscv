@@ -1,0 +1,985 @@
+{
+  "float_validation_accuracy": 0.987816333770752,
+  "ptq_validation_accuracy": 0.9831302762031555,
+  "qat_validation_accuracy": 0.987816333770752,
+  "selection": "validation only; best first epoch on ties",
+  "validation_int8": {
+    "correct": 1054,
+    "total": 1067,
+    "accuracy": 0.9878163074039362,
+    "confusion_matrix": [
+      [
+        164,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        100,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        99,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        98,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        99,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        1,
+        98,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        99,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        97
+      ]
+    ],
+    "class_recall": [
+      0.9820359281437125,
+      1.0,
+      0.99,
+      0.98,
+      0.99,
+      0.98,
+      0.99,
+      1.0,
+      1.0,
+      0.97
+    ]
+  },
+  "validation_float": {
+    "correct": 1054,
+    "total": 1067,
+    "accuracy": 0.9878163074039362,
+    "confusion_matrix": [
+      [
+        164,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        100,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        98,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        98,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        99,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        99,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        99,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        97
+      ]
+    ],
+    "class_recall": [
+      0.9820359281437125,
+      1.0,
+      0.98,
+      0.98,
+      0.99,
+      0.99,
+      0.99,
+      1.0,
+      1.0,
+      0.97
+    ]
+  },
+  "validation_accumulators": [
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -34552,
+        "max_acc": 45517,
+        "saturated": 80,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -45522,
+        "max_acc": 41919,
+        "saturated": 39,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -131518,
+        "max_acc": 78457,
+        "saturated": 139,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -34552,
+        "max_acc": 49280,
+        "saturated": 126,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -40081,
+        "max_acc": 53449,
+        "saturated": 95,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -133644,
+        "max_acc": 83472,
+        "saturated": 234,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -35653,
+        "max_acc": 47364,
+        "saturated": 140,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -41112,
+        "max_acc": 48406,
+        "saturated": 135,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -188329,
+        "max_acc": 82855,
+        "saturated": 251,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -37123,
+        "max_acc": 46560,
+        "saturated": 163,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -40653,
+        "max_acc": 45227,
+        "saturated": 148,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -164032,
+        "max_acc": 86207,
+        "saturated": 281,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -34552,
+        "max_acc": 46385,
+        "saturated": 100,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -41820,
+        "max_acc": 45748,
+        "saturated": 84,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -145809,
+        "max_acc": 86098,
+        "saturated": 202,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -35933,
+        "max_acc": 47872,
+        "saturated": 110,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -44496,
+        "max_acc": 45561,
+        "saturated": 120,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -163914,
+        "max_acc": 73642,
+        "saturated": 211,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -35933,
+        "max_acc": 48994,
+        "saturated": 85,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -46960,
+        "max_acc": 46688,
+        "saturated": 58,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -162209,
+        "max_acc": 87531,
+        "saturated": 159,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -34552,
+        "max_acc": 45517,
+        "saturated": 96,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -39665,
+        "max_acc": 39588,
+        "saturated": 51,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -145347,
+        "max_acc": 78667,
+        "saturated": 133,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -33749,
+        "max_acc": 47504,
+        "saturated": 53,
+        "elements": 88064
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -40723,
+        "max_acc": 45426,
+        "saturated": 36,
+        "elements": 44032
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -155892,
+        "max_acc": 83954,
+        "saturated": 74,
+        "elements": 22016
+      }
+    ]
+  ],
+  "test_int8": {
+    "correct": 1045,
+    "total": 1069,
+    "accuracy": 0.9775491113189897,
+    "confusion_matrix": [
+      [
+        164,
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        0,
+        100,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        99,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        97,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        99,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        96,
+        1,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        96,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        97,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        97
+      ]
+    ],
+    "class_recall": [
+      0.9704142011834319,
+      1.0,
+      0.99,
+      0.97,
+      0.99,
+      0.96,
+      0.96,
+      0.97,
+      1.0,
+      0.97
+    ]
+  },
+  "test_float": {
+    "correct": 1044,
+    "total": 1069,
+    "accuracy": 0.9766136576239476,
+    "confusion_matrix": [
+      [
+        164,
+        1,
+        2,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        100,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        98,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        97,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        100,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        99,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        2,
+        0,
+        2,
+        0,
+        0,
+        1,
+        94,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        96,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        100,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        96
+      ]
+    ],
+    "class_recall": [
+      0.9704142011834319,
+      1.0,
+      0.98,
+      0.97,
+      1.0,
+      0.99,
+      0.94,
+      0.96,
+      1.0,
+      0.96
+    ]
+  },
+  "test_accumulators": [
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -34552,
+        "max_acc": 47889,
+        "saturated": 158,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -45221,
+        "max_acc": 47596,
+        "saturated": 115,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -149047,
+        "max_acc": 76444,
+        "saturated": 267,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -38241,
+        "max_acc": 47188,
+        "saturated": 127,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -47283,
+        "max_acc": 46224,
+        "saturated": 101,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -154335,
+        "max_acc": 74931,
+        "saturated": 234,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -33567,
+        "max_acc": 45517,
+        "saturated": 157,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -45231,
+        "max_acc": 49424,
+        "saturated": 149,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -190215,
+        "max_acc": 82258,
+        "saturated": 307,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -34446,
+        "max_acc": 46332,
+        "saturated": 147,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -40097,
+        "max_acc": 48757,
+        "saturated": 127,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -164435,
+        "max_acc": 74316,
+        "saturated": 241,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -32653,
+        "max_acc": 45954,
+        "saturated": 80,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -41134,
+        "max_acc": 45031,
+        "saturated": 48,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -149920,
+        "max_acc": 73248,
+        "saturated": 138,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -35968,
+        "max_acc": 47872,
+        "saturated": 173,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -41416,
+        "max_acc": 45867,
+        "saturated": 124,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -164231,
+        "max_acc": 85950,
+        "saturated": 261,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -38552,
+        "max_acc": 45641,
+        "saturated": 135,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -42270,
+        "max_acc": 44952,
+        "saturated": 113,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -164782,
+        "max_acc": 79946,
+        "saturated": 255,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -33799,
+        "max_acc": 45552,
+        "saturated": 62,
+        "elements": 262144
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -36479,
+        "max_acc": 46012,
+        "saturated": 36,
+        "elements": 131072
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -145680,
+        "max_acc": 70304,
+        "saturated": 120,
+        "elements": 65536
+      }
+    ],
+    [
+      {
+        "layer": "conv1",
+        "min_acc": -31435,
+        "max_acc": 45641,
+        "saturated": 41,
+        "elements": 92160
+      },
+      {
+        "layer": "conv2",
+        "min_acc": -35122,
+        "max_acc": 44594,
+        "saturated": 22,
+        "elements": 46080
+      },
+      {
+        "layer": "conv3",
+        "min_acc": -153248,
+        "max_acc": 66791,
+        "saturated": 52,
+        "elements": 23040
+      }
+    ]
+  ],
+  "software_contract_equal": true,
+  "int8_test_drop_percentage_points": -0.093545369504211,
+  "dataset_only_goal_met": true,
+  "camera_accuracy_verified": false,
+  "hardware_verified": false
+}

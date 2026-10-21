@@ -1,0 +1,46 @@
+{
+  "name": "asymmetric_rgb",
+  "identity": {
+    "label": null
+  },
+  "layers": {
+    "gray32": {
+      "elements": 1024,
+      "sha256": "943e7b4b21f2480338611ae43cd9408051c7291552cedefd39966cd8b4932c2f"
+    },
+    "conv1": {
+      "elements": 2048,
+      "sha256": "8ca080785775491cef5577f24aa93fea18bcd51f48bbd89db973fd63388671ca"
+    },
+    "conv2": {
+      "elements": 1024,
+      "sha256": "984acff16e1bd8f4eaf9c55e01a26a484c6783c073094dcac73899bfe744bf47"
+    },
+    "conv3": {
+      "elements": 512,
+      "sha256": "3f028c79ae77f7be8b99d1bf3a1bf375203b74ca2519dc12cf0dc2047162ffe9"
+    },
+    "gap": {
+      "elements": 32,
+      "sha256": "a8c4ab9bb7bd6138a93aeaf9c787dcc061b1cdb9fe0fd287791206cc925a0ce2"
+    },
+    "scores": {
+      "elements": 10,
+      "sha256": "c84f4d470c269cf416ee8186e701e26c3029b49e814a8d86e957ab01d2a3c0fc"
+    }
+  },
+  "scores": [
+    5466,
+    -6412,
+    -5515,
+    -1759,
+    -1837,
+    586,
+    152,
+    -6607,
+    3052,
+    2419
+  ],
+  "prediction": 0,
+  "rgb96_sha256": "63fb6a0fcc97d9b1f6be8a5d46a5849b42d5c79fb51b45f27439934c9df2b667"
+}

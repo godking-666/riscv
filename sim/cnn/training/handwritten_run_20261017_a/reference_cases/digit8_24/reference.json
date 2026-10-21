@@ -1,0 +1,47 @@
+{
+  "name": "digit8_24",
+  "identity": {
+    "label": 8,
+    "sample_id": "0557873fdd9901202286f08c12cd43290dc4aa2a41f36d973e40491afd57bbd1"
+  },
+  "layers": {
+    "gray32": {
+      "elements": 1024,
+      "sha256": "01b8a660ce1ad9fc0dd2351d6b0b3249372af7da34a2912be066d283101bcfb9"
+    },
+    "conv1": {
+      "elements": 2048,
+      "sha256": "9f4b2adb648f00c61ea327dfd503d9a68f853bcde1602f010512b588d70385c0"
+    },
+    "conv2": {
+      "elements": 1024,
+      "sha256": "a87142ed63b959fcf2b586572834b1c3eba6e0a180bdde251242fe1bec9684d7"
+    },
+    "conv3": {
+      "elements": 512,
+      "sha256": "15994a9933af20a4b2cc3ef387b4c82a6bbfae929e78d8b22ddbcfa03d6f5820"
+    },
+    "gap": {
+      "elements": 32,
+      "sha256": "594f9c480c1746a5de5eff11b2d379d60943e70315e8d8c409a732a5f3b6d018"
+    },
+    "scores": {
+      "elements": 10,
+      "sha256": "96cecf7118761f0ca9ade91581b6fb9682e299e9a410c68bb97781a0803ee217"
+    }
+  },
+  "scores": [
+    -124,
+    139,
+    -512,
+    -470,
+    -680,
+    -292,
+    -185,
+    -705,
+    908,
+    116
+  ],
+  "prediction": 8,
+  "rgb96_sha256": "2c7de015dd889f9b7d73164fbfb3d65d7a3549f1d780e26ec5093b978381b23a"
+}

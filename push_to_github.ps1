@@ -20,7 +20,7 @@
 $ErrorActionPreference = "Stop"
 
 # ---- ★ 改这里 ★ ----
-$RepoUrl = "https://github.com/<你的用户名>/<仓库名>.git"
+$RepoUrl = "https://github.com/godking-666/riscv676.git"
 # --------------------
 
 $RepoDir = $PSScriptRoot

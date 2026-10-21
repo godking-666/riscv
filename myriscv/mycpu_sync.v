@@ -2,7 +2,14 @@
 
 module mycpu_sync #(
     // 兼容现有地址 0 测试；运行链接在 0x8000_0000 的 riscv-tests 时覆写此参数。
-    parameter [31:0] RESET_PC = 32'h0000_0000
+    parameter [31:0] RESET_PC = 32'h0000_0000,
+    parameter integer EXTERNAL_MEM_DRAIN_ENABLE = 0,
+    // Ordinary EX redirects may submit their registered target while flushing IF.
+    parameter integer BRANCH_FETCH_TURNOVER_ENABLE = 1,
+    parameter integer DIAG_PERF_ENABLE = 0,
+    // Reuse a matching, successful OLD I response on an ordinary EX redirect.
+    parameter integer BRANCH_RESPONSE_REUSE_ENABLE = 1,
+    parameter integer DETAIL_PERF_ENABLE = 0
 ) (
     input  wire        clk,
     input  wire        resetn,
@@ -10,6 +17,8 @@ module mycpu_sync #(
     input  wire        irq_external,
     input  wire        irq_software,
     input  wire        irq_timer,
+    // Optional SoC ordered-write entry; parameter 0 ignores an unconnected input.
+    input  wire        memory_order_busy,
     // 只读指令请求/响应总线；请求与响应可相隔任意拍。
     output wire        inst_req_valid,
     output wire [31:0] inst_req_addr,
@@ -36,14 +45,19 @@ module mycpu_sync #(
     // Read-only observation sideband; never feeds pipeline control.
     output wire [7:0]  perf_events,
     output wire [31:0] perf_branch_target,
-    output wire [31:0] perf_fetch_pc
+    output wire [31:0] perf_fetch_pc,
+    output wire [14:0] perf_diag_flags,
+    output wire [31:0] perf_diag_target_pc,
+    output wire [31:0] perf_diag_pending_pc,
+    output wire [31:0] perf_diag_buffer_pc,
+    output wire [15:0] perf_detail_cpu
 );
 
     // ================================================================================
     // 流水结构: IF | ID | EX | MEM | WB
     //   IF  : 指令请求/响应、顺序预取、响应缓冲与错路响应丢弃
-    //   ID  : 译码 / 立即数 / 寄存器堆读 / 转发选择 / 分支判定 / PC 重定向 / load-use 阻塞
-    //   EX  : ALU → 访存地址；通过 valid/ready 提交 load/store 请求
+    //   ID  : 译码 / 立即数 / 寄存器堆读 / 转发选择 / 分支判定 / load-use 阻塞
+    //   EX  : 使用寄存的分支结果重定向；ALU → 访存地址；提交 load/store 请求
     //   MEM : 保持事务直到 rsp_valid；load 经 l_alu 后锁进 MEM/WB
     //   WB  : 写寄存器堆 + 调试口
     // 指令侧和数据侧都采用类 SRAM 请求/响应总线；每侧首版各自单 outstanding。
@@ -72,11 +86,20 @@ module mycpu_sync #(
     reg [31:0] inst_buffer_pc;
     reg [31:0] inst_buffer_data;
     reg        inst_buffer_error;
+    wire       branch_response_reuse;
+    wire [31:0] branch_target_next_pc;
     wire       inst_req_fire;
     wire       inst_response_good;
     wire       inst_if_id_accept;
     wire       inst_buffer_pop;
     wire       inst_turnover_safe;
+    wire       branch_fetch_redirect;
+    // 普通分支的重定向改在 EX 级产生：ID 只判定 taken/target 并随指令寄存，
+    // 目标取指由 EX 重定向发起，把 "ID 比较 -> 取指地址 -> 互连 -> 桥" 这条
+    // 跨级组合链在 ID/EX 处切断；EX 跳转当拍可提交该寄存目标。
+    wire       ex_br_redirect;
+    reg        id_ex_br_taken;
+    reg [31:0] id_ex_br_target;
     wire load_use;
     wire frontend_hold, bubble_id_ex, id_fire;
     wire data_pipeline_stall;
@@ -107,6 +130,22 @@ module mycpu_sync #(
     reg [31:0] if_id_pc;
     reg if_id_valid;
     reg if_id_access_fault;
+
+    // ==================== BTB 分支预测（新增，见文件末尾 btb 例化）====================
+    // ★ 设计要点：**预测必须跟着指令一起存下来**，不能在 ID 级重新查 BTB 来判断预测对错。
+    //   原因：BTB 条目可能在"IF 预测"和"ID 判定"之间被别的指令改写（索引别名），
+    //   导致重查结果与实际预测不一致；若恰好让 id_mispredict 漏判，
+    //   就会执行错误路径且不纠正 —— 这是正确性事故。
+    //   所以预测结果沿 请求→缓冲→IF/ID 三级逐级寄存。
+    wire        btb_pred_taken;      // 对 pc 的预测
+    wire [31:0] btb_pred_target;
+    reg         pend_pred_taken;     // 在飞请求（inst_pending_pc）的预测
+    reg  [31:0] pend_pred_target;
+    reg         ibuf_pred_taken;     // 指令缓冲里的预测
+    reg  [31:0] ibuf_pred_target;
+    reg         if_id_pred_taken;    // IF/ID 里这条指令当初被预测成什么
+    reg  [31:0] if_id_pred_target;
+
     wire [31:0] inst;
     wire [6:0] opcode;
     wire [2:0] funct3;
@@ -119,6 +158,7 @@ module mycpu_sync #(
     wire inst_add;
     wire inst_addi;
     wire inst_sub;
+    wire inst_mul;              // Zmmul: funct3=000/001/010/011 only
     wire inst_lui;
     wire inst_auipc;
     wire inst_and;
@@ -212,6 +252,8 @@ module mycpu_sync #(
     reg        id_ex_gf_we;       // 已实现的普通指令和 CSR 指令写 GPR 许可
     reg        id_ex_valid;       // 气泡唯一标志
     reg        id_ex_serial;      // 串行项标记，随指令走到 WB 后释放前端
+    reg        id_ex_mul;
+    reg [1:0]  id_ex_mul_op;
     reg        id_ex_csr;
     reg [11:0] id_ex_csr_addr;
     reg [1:0]  id_ex_csr_op;       // funct3[1:0]：01 写、10 置位、11 清位
@@ -255,6 +297,13 @@ module mycpu_sync #(
     wire [1:0] st_off;
     wire [3:0] st_we;
     wire [31:0] ex_wb_data;
+    wire [32:0] mul_operand_a, mul_operand_b;
+    wire [65:0] mul_product;
+    wire mul_start, mul_ce, ex_mul_ready;
+    wire perf_memory_stall;
+    reg mul_busy, mul_done;
+    reg [2:0] mul_count;
+    reg [31:0] mul_result;
     reg [31:0] ex_mem_alu_result;  // 非 load 的写回值; load 时它低 2 位当 l_alu 的 sel_addr
     reg [31:0] ex_mem_pc;          // debug_wb_pc
     reg [31:0] ex_mem_next_pc;
@@ -349,19 +398,48 @@ module mycpu_sync #(
     assign inst_turnover_safe = !inst_pending ||
                                 (inst_rsp_valid &&
                                  (inst_pending_drop || inst_if_id_accept));
-    assign inst_req_valid = resetn && fetch_valid && !redirect_valid &&
-                            inst_turnover_safe &&
-                            (!inst_buffer_valid || inst_buffer_pop);
-    assign inst_req_addr = pc;
+    // EX redirect discards the OLD buffer and completing response, so only an
+    // outstanding request WITHOUT its response can prevent target submission.
+    // Use the registered ID/EX target; no live ID compare/target enters this mux.
+    // ex_br_redirect already excludes older faults, trap and MRET. Those control
+    // redirects retain request suppression; parameter 0 retains the prior IF.
+    assign branch_fetch_redirect = (BRANCH_FETCH_TURNOVER_ENABLE != 0) &&
+                                    branch_redirect;
+    // 044: only an accepted, completing I request owns usable response data.
+    // Compare registered PCs, never live ID operands. Ordered stores must have
+    // drained before reusing a response; old buffer entries are still flushed.
+    // A prior drop is superseded only by a new ordinary redirect to THIS PC.
+    assign branch_response_reuse = (BRANCH_RESPONSE_REUSE_ENABLE != 0) &&
+                                    branch_fetch_redirect && fetch_valid &&
+                                    inst_pending && inst_rsp_valid && !inst_rsp_error &&
+                                    (inst_pending_pc == id_ex_br_target) &&
+                                    ((EXTERNAL_MEM_DRAIN_ENABLE == 0) || !memory_order_busy);
+    assign branch_target_next_pc = id_ex_br_target + 32'd4;
+    assign inst_req_valid = resetn && fetch_valid &&
+                            (branch_fetch_redirect ?
+                             (!inst_pending || inst_rsp_valid) :
+                             (!redirect_valid && inst_turnover_safe &&
+                              (!inst_buffer_valid || inst_buffer_pop)));
+    // A reused target is already delivered to IF/ID below. Use the freed I slot
+    // for target+4, so avoiding the duplicate fetch also removes a fetch bubble.
+    assign inst_req_addr = branch_fetch_redirect ?
+                           (branch_response_reuse ? branch_target_next_pc : id_ex_br_target) : pc;
     assign inst_req_fire = inst_req_valid && inst_req_ready;
 
     always @(posedge clk) begin
         if (!resetn)
             pc <= RESET_PC;
         else if (redirect_valid)
-            pc <= redirect_pc;
+            // Accepted target is now owned by pending_pc; do not fetch it twice.
+            // Backpressure or an old unfinished request leaves target for retry.
+            pc <= branch_response_reuse ?
+                  (inst_req_fire ? branch_target_next_pc + 32'd4 : branch_target_next_pc) :
+                  ((branch_fetch_redirect && inst_req_fire) ? branch_target_next_pc : redirect_pc);
         else if (inst_req_fire)
-            pc <= pc + 32'd4;
+            // ★ BTB 预测：命中且计位器偏 taken 就取目标，否则顺序 +4。
+            // 注意 inst_req_addr 在非重定向路径下就等于 pc，所以这里的预测
+            // 与下方锁存的 pend_pred_* 是同一条指令的同一个预测。
+            pc <= btb_pred_taken ? btb_pred_target : (pc + 32'd4);
     end
 
     // 单 outstanding 请求跟踪。重定向不能撤销已接受请求，所以把它标记为
@@ -371,6 +449,8 @@ module mycpu_sync #(
             inst_pending      <= 1'b0;
             inst_pending_pc   <= 32'b0;
             inst_pending_drop <= 1'b0;
+            pend_pred_taken   <= 1'b0;
+            pend_pred_target  <= 32'b0;
         end else begin
             if (inst_pending && inst_rsp_valid) begin
                 inst_pending      <= 1'b0;
@@ -382,6 +462,10 @@ module mycpu_sync #(
                 inst_pending      <= 1'b1;
                 inst_pending_pc   <= inst_req_addr;
                 inst_pending_drop <= 1'b0;
+                // 预测跟着这条请求走。重定向路径下预测不参与决策
+                //（redirect 本身是权威），但照存不误，保持一致。
+                pend_pred_taken   <= btb_pred_taken;
+                pend_pred_target  <= btb_pred_target;
             end
         end
     end
@@ -393,6 +477,8 @@ module mycpu_sync #(
             inst_buffer_pc    <= 32'b0;
             inst_buffer_data  <= 32'b0;
             inst_buffer_error <= 1'b0;
+            ibuf_pred_taken   <= 1'b0;
+            ibuf_pred_target  <= 32'b0;
         end else begin
             if (inst_buffer_pop)
                 inst_buffer_valid <= 1'b0;
@@ -401,6 +487,9 @@ module mycpu_sync #(
                 inst_buffer_pc    <= inst_pending_pc;
                 inst_buffer_data  <= inst_rsp_rdata;
                 inst_buffer_error <= inst_rsp_error;
+                // 预测随指令进缓冲，出缓冲时再随指令进 IF/ID
+                ibuf_pred_taken   <= pend_pred_taken;
+                ibuf_pred_target  <= pend_pred_target;
             end
         end
     end
@@ -417,6 +506,20 @@ module mycpu_sync #(
             if_id_pc <= 32'h00000000;
             if_id_valid <= 1'b0;
             if_id_access_fault <= 1'b0;
+            if_id_pred_taken <= 1'b0;
+            if_id_pred_target <= 32'h0;
+        end
+        else if (branch_response_reuse) begin
+            // Consume the OLD pending response on this redirect edge; a new
+            // target+4 acceptance may replace pending_pc only AFTER this edge.
+            // id_fire remains blocked by branch_redirect, so the discarded ID
+            // instruction cannot issue. Reset, trap and MRET retain priority.
+            if_id_inst <= inst_rsp_rdata;
+            if_id_pc <= inst_pending_pc;
+            if_id_valid <= 1'b1;
+            if_id_access_fault <= 1'b0;
+            if_id_pred_taken <= pend_pred_taken;
+            if_id_pred_target <= pend_pred_target;
         end
         else if (kill_if_id) begin
             // 分支/trap 重定向或串行发射清除已经消费/失效的 ID 项。
@@ -424,30 +527,40 @@ module mycpu_sync #(
             if_id_pc <= 32'hFFFF_FFFF;                         // 哨兵:波形上一眼认出气泡
             if_id_valid <= 1'b0;
             if_id_access_fault <= 1'b0;
+            if_id_pred_taken <= 1'b0;
+            if_id_pred_target <= 32'h0;
         end
         else if (frontend_hold) begin
             if_id_inst <= if_id_inst;
             if_id_pc <= if_id_pc;
             if_id_valid <= if_id_valid;
             if_id_access_fault <= if_id_access_fault;
+            if_id_pred_taken <= if_id_pred_taken;
+            if_id_pred_target <= if_id_pred_target;
         end
         else if (inst_buffer_valid) begin
             if_id_inst <= inst_buffer_data;
             if_id_pc <= inst_buffer_pc;
             if_id_valid <= 1'b1;
             if_id_access_fault <= inst_buffer_error;
+            if_id_pred_taken <= ibuf_pred_taken;
+            if_id_pred_target <= ibuf_pred_target;
         end
         else if (inst_response_good) begin
             if_id_inst <= inst_rsp_rdata;
             if_id_pc <= inst_pending_pc;
             if_id_valid <= 1'b1;
             if_id_access_fault <= inst_rsp_error;
+            if_id_pred_taken <= pend_pred_taken;
+            if_id_pred_target <= pend_pred_target;
         end
         else begin
             if_id_inst <= 32'h0000_0013;
             if_id_pc <= 32'hFFFF_FFFF;
             if_id_valid <= 1'b0;
             if_id_access_fault <= 1'b0;
+            if_id_pred_taken <= 1'b0;
+            if_id_pred_target <= 32'h0;
         end
     end
 
@@ -469,6 +582,8 @@ module mycpu_sync #(
     assign inst_add   = (opcode == 7'b0110011) && (funct3 == 3'b000) && (funct7 == 7'b0000000);
     assign inst_addi  = (opcode == 7'b0010011) && (funct3 == 3'b000);
     assign inst_sub   = (opcode == 7'b0110011) && (funct3 == 3'b000) && (funct7 == 7'b0100000);
+    // Four multiply instructions only. DIV/REM remain illegal; misa.M stays 0.
+    assign inst_mul   = (opcode == 7'b0110011) && (funct7 == 7'b0000001) && !funct3[2];
     assign inst_lui   = (opcode == 7'b0110111);
     assign inst_auipc = (opcode == 7'b0010111);
     assign inst_and   = (opcode == 7'b0110011) && (funct3 == 3'b111) && (funct7 == 7'b0000000);
@@ -530,7 +645,7 @@ module mycpu_sync #(
     assign i_shamt= inst_slli | inst_srli | inst_srai;
     assign i_I    = inst_slti | inst_sltiu | inst_addi | inst_andi | inst_ori | inst_xori;
     assign i_R    = inst_add | inst_sub | inst_and | inst_or | inst_xor |
-                    inst_sll | inst_slt | inst_sltu | inst_srl | inst_sra;
+                    inst_sll | inst_slt | inst_sltu | inst_srl | inst_sra | inst_mul;
     assign inst_s = inst_sw | inst_sh | inst_sb;
     assign inst_b = inst_beq | inst_bne | inst_blt | inst_bge | inst_bltu | inst_bgeu;
 
@@ -735,6 +850,23 @@ module mycpu_sync #(
         end
     end
 
+    // Multiply metadata follows the same hold/kill rules as the ID/EX operands.
+    always @(posedge clk) begin
+        if (!resetn || kill_id_ex) begin
+            id_ex_mul <= 1'b0;
+            id_ex_mul_op <= 2'b0;
+        end else if (data_pipeline_stall) begin
+            id_ex_mul <= id_ex_mul;
+            id_ex_mul_op <= id_ex_mul_op;
+        end else if (bubble_id_ex) begin
+            id_ex_mul <= 1'b0;
+            id_ex_mul_op <= 2'b0;
+        end else if (id_fire) begin
+            id_ex_mul <= inst_mul;
+            id_ex_mul_op <= funct3[1:0];
+        end
+    end
+
     always @(posedge clk) begin
         if (!resetn || kill_id_ex)
             id_ex_next_pc <= 32'b0;
@@ -744,6 +876,25 @@ module mycpu_sync #(
             id_ex_next_pc <= 32'b0;
         else if (id_fire)
             id_ex_next_pc <= id_taken ? bj_pc : if_id_pc + 32'd4;
+    end
+
+    // 分支判定结果随指令进入 EX：ID 只负责"算出 taken/target"，
+    // 真正的重定向由 EX 级发起，因此这两个字段必须与指令同生命周期
+    // （停顿时保持、加载气泡时清零、kill 时废弃）。
+    always @(posedge clk) begin
+        if (!resetn || kill_id_ex) begin
+            id_ex_br_taken  <= 1'b0;
+            id_ex_br_target <= 32'b0;
+        end else if (data_pipeline_stall) begin
+            id_ex_br_taken  <= id_ex_br_taken;
+            id_ex_br_target <= id_ex_br_target;
+        end else if (bubble_id_ex) begin
+            id_ex_br_taken  <= 1'b0;
+            id_ex_br_target <= 32'b0;
+        end else if (id_fire) begin
+            id_ex_br_taken  <= id_taken;
+            id_ex_br_target <= bj_pc;
+        end
     end
 
     // CSR 元数据随有效指令前进；停顿/取消时清零，不能把气泡当作 CSR。
@@ -807,6 +958,46 @@ module mycpu_sync #(
     alu u_alu (.alu_op(id_ex_alu_op), .alu_src1(id_ex_src1),
                .alu_src2(id_ex_src2), .alu_result(alu_result));
 
+    // One signed 33x33 IP covers signed/unsigned 32-bit products by extension.
+    // The generated mul has XY/M/P/OUT registers (4 CE-enabled pipeline edges).
+    // Keep operands in ID/EX; sample p on the following edge, after its NBA update.
+    assign mul_operand_a = {((id_ex_mul_op == 2'b01) || (id_ex_mul_op == 2'b10)) && id_ex_src1[31], id_ex_src1};
+    assign mul_operand_b = {(id_ex_mul_op == 2'b01) && id_ex_src2[31], id_ex_src2};
+    assign mul_start = resetn && id_ex_valid && id_ex_mul && !ex_exc_valid &&
+                       !older_fault_for_ex && !kill_id_ex && !mul_busy && !mul_done;
+    assign mul_ce = mul_start || mul_busy;
+    mul u_mul (
+        .ce(mul_ce), .rst(!resetn), .clk(clk),
+        .a(mul_operand_a), .b(mul_operand_b), .p(mul_product)
+    );
+    always @(posedge clk) begin
+        if (!resetn || kill_id_ex || !id_ex_valid || !id_ex_mul ||
+            ex_exc_valid || older_fault_for_ex) begin
+            mul_busy <= 1'b0;
+            mul_done <= 1'b0;
+            mul_count <= 3'b0;
+            mul_result <= 32'b0;
+        end else if (id_ex_advance) begin
+            mul_busy <= 1'b0;
+            mul_done <= 1'b0;
+            mul_count <= 3'b0;
+        end else if (mul_start) begin
+            mul_busy <= 1'b1;
+            mul_done <= 1'b0;
+            mul_count <= 3'd4;
+        end else if (mul_busy) begin
+            if (mul_count == 3'd1) begin
+                mul_busy <= 1'b0;
+                mul_done <= 1'b1;
+                mul_count <= 3'b0;
+                mul_result <= (id_ex_mul_op == 2'b00) ? mul_product[31:0] : mul_product[63:32];
+            end else begin
+                mul_count <= mul_count - 3'd1;
+            end
+        end
+    end
+    assign ex_mul_ready = !id_ex_mul || id_ex_exc_valid || mul_done;
+
     // 地址在 EX 才由 ALU 算出：半字看 bit0，字看 bit[1:0]；字节天然对齐。
     // 已有 ID 故障优先，不允许 EX 的默认检测覆盖原 cause/tval。
     assign ex_access_half = id_ex_inst_5l[3] || id_ex_inst_5l[2] || id_ex_sh;
@@ -860,16 +1051,27 @@ module mycpu_sync #(
     assign ex_mem_complete  = ex_mem_valid &&
                               (!ex_mem_mem_pending || data_rsp_valid);
     assign ex_mem_ready     = !ex_mem_valid || ex_mem_complete;
-    assign id_ex_can_advance = ex_mem_ready &&
+    assign id_ex_can_advance = ex_mem_ready && ex_mul_ready &&
                                (!id_ex_needs_bus || data_req_ready);
     assign id_ex_advance    = id_ex_valid && id_ex_can_advance;
     assign data_pipeline_stall = (ex_mem_valid && !ex_mem_complete) ||
                                  (id_ex_valid && !id_ex_can_advance);
 
-    // EX 这一拍能前递/写回的值: 只有 alu_result。
+    // EX 级重定向：本条分支确实能前进到 EX/MEM 时才发起一次。
+    // - 停顿（EX/MEM 等响应、乘法未完、访存不可发射）时不跳，避免重复重定向；
+    // - 本条自身异常、或更老指令已有故障时不跳，等 trap 覆盖 PC；
+    // - 同步 trap / MRET 在 WB 提交，比 EX 分支更老，必须优先。
+    assign ex_br_redirect = resetn && id_ex_advance && id_ex_br_taken &&
+                            !id_ex_exc_valid && !older_fault_for_ex &&
+                            !trap_redirect_req && !mret_redirect_req;
+
+    // Multiply can forward only after completion; its result survives MEM backpressure.
     //   ★ load 在 EX 这一拍【没有】可用数据 —— 它的数据要下一拍才从 RAM 出来。
     //     所以 EX→ID 前递必须用 id_ex_i_l 屏蔽掉, 这就是 load-use 阻塞存在的原因。
-    assign ex_wb_data = alu_result;
+    assign ex_wb_data = id_ex_mul ? mul_result : alu_result;
+    // Preserve the original DDR-memory wait definition. Pure multiply wait is OTHER.
+    assign perf_memory_stall = (ex_mem_valid && !ex_mem_complete) ||
+                               (id_ex_valid && id_ex_needs_bus && !data_req_ready);
 
     // ==================== ⑧ EX/MEM 流水寄存器 = MEM 级的输入 ====================
     // ★ 位置: 正好卡在 EX / MEM 的交界处。
@@ -897,7 +1099,7 @@ module mycpu_sync #(
         else if(id_ex_advance)begin
             ex_mem_valid      <= 1'b1;
             ex_mem_serial     <= id_ex_serial;
-            ex_mem_alu_result <= alu_result;
+            ex_mem_alu_result <= ex_wb_data;
             ex_mem_pc         <= id_ex_pc;
             ex_mem_inst       <= id_ex_inst;
             ex_mem_rd         <= id_ex_rd;
@@ -1144,7 +1346,8 @@ module mycpu_sync #(
     //   gf_we  —— 分支/存数不写寄存器, 前递它们等于前递垃圾
     //   rd != 0 —— 否则 add x0,x1,x2 这类也会命中, 消费者拿到的不是 0 而是 ALU 结果
     //   ~i_l   —— EX 里是 load 时数据还没出来, 绝对不能前递(这就是 load-use 阻塞的由来)
-    assign fwd_ex_en  = id_ex_valid & id_ex_gf_we & ~id_ex_i_l & ~ex_exc_valid;
+    assign fwd_ex_en  = id_ex_valid & id_ex_gf_we & ~id_ex_i_l & ~ex_exc_valid &
+                        (!id_ex_mul || mul_done);
     assign id_fwd_ex1 = fwd_ex_en & (id_ex_rd != 5'd0) & (id_ex_rd == rs1);
     assign id_fwd_ex2 = fwd_ex_en & (id_ex_rd != 5'd0) & (id_ex_rd == rs2);
 
@@ -1217,7 +1420,8 @@ module mycpu_sync #(
     assign mret_redirect_target = csr_mret_target;
 
     // pipeline_empty 已在文件顶部前置声明。
-    assign pipeline_empty = !id_ex_valid && !ex_mem_valid && !mem_wb_valid;
+    assign pipeline_empty = !id_ex_valid && !ex_mem_valid && !mem_wb_valid &&
+                            !((EXTERNAL_MEM_DRAIN_ENABLE != 0) && memory_order_busy);
     // 已发现的故障令前端保持，老指令仍逐级完成；WB 事件负责取消年轻项。
     assign fault_inflight = (id_ex_valid && ex_exc_valid) ||
                             (ex_mem_valid && ex_mem_exc_valid) ||
@@ -1241,26 +1445,64 @@ module mycpu_sync #(
     end
     assign serial_issue = (flow_state == FLOW_SERIAL_DRAIN) &&
                           pipeline_empty && serial_candidate;
+    // EX 级重定向当拍，ID 里必然是错误路径指令，不能发射：让它变成气泡，
+    // 目标指令在下一拍由更新后的 pc 重新取回。
     assign id_fire = resetn && fetch_valid && if_id_valid &&
                       (((flow_state == FLOW_RUN) && !irq_candidate &&
                         !load_use && !serial_candidate && !data_pipeline_stall) ||
                        serial_issue) && !fault_inflight &&
-                      !trap_redirect_req && !mret_redirect_req;
+                      !trap_redirect_req && !mret_redirect_req &&
+                      !branch_redirect;
     assign bubble_id_ex = !id_fire && !data_pipeline_stall;
     assign frontend_hold = (flow_state != FLOW_RUN) || load_use ||
                             data_pipeline_stall || serial_candidate ||
                             fault_inflight || irq_candidate;
 
-    // 普通 ID 分支在本拍真正发射后才能重定向；失效项或 load-use 停顿不允许跳转。
-    assign branch_redirect = id_fire && !id_exc_valid &&
-                             (flow_state == FLOW_RUN) && id_taken;
-    assign redirect_valid = trap_redirect_req || mret_redirect_req || branch_redirect;
+    // 普通分支的重定向改由 EX 级产生（ex_br_redirect）：ID 只在发射时把
+    // taken/target 存进 ID/EX，等指令真正能前进到 EX/MEM 的那一拍才改 PC。
+    assign branch_redirect = ex_br_redirect;
+
+    // ★ BTB 误预测重定向（新增）。
+    // 原设计只在 id_ex_br_taken 时重定向 —— 若 BTB 预测"跳"而实际"不跳"，
+    // 就没有任何机制把 PC 拉回顺序路径，会执行错误指令。所以必须补这一条。
+    //
+    // 判定：拿 ID 里这条指令当初"被预测成什么"(if_id_pred_*) 与"实际是什么"(id_taken/bj_pc) 比对。
+    //   ① 预测 taken != 实际 taken        -> 误预测
+    //   ② 都 taken 但目标不同             -> 误预测
+    //   （都 not-taken 时取的是顺序路径，无需纠正）
+    wire id_is_control = inst_bne | inst_beq | inst_blt | inst_bge |
+                         inst_bltu | inst_bgeu | inst_jal | inst_jalr;
+    wire id_mispredict = if_id_valid && id_is_control && !load_use &&
+                         ((if_id_pred_taken != id_taken) ||
+                          (id_taken && (bj_pc != if_id_pred_target)));
+
+    assign redirect_valid = trap_redirect_req || mret_redirect_req ||
+                            id_mispredict || branch_redirect;
     assign redirect_pc = trap_redirect_req ? trap_redirect_target :
-                         mret_redirect_req ? mret_redirect_target : bj_pc;
+                         mret_redirect_req ? mret_redirect_target :
+                         id_mispredict     ? (id_taken ? bj_pc : (if_id_pc + 32'd4)) :
+                                             id_ex_br_target;
     assign kill_if_id = redirect_valid || serial_issue;
     assign kill_id_ex = trap_redirect_req || mret_redirect_req;
     assign kill_ex_mem = trap_redirect_req || mret_redirect_req;
     assign kill_mem_wb = trap_redirect_req || mret_redirect_req;
+
+    // ==================== BTB / 分支预测器 ====================
+    // 查询用 pc（IF 正在取的地址）；更新在 ID 级分支/跳转判定完成那一拍。
+    // 预测结果沿 pend_* -> ibuf_* / if_id_* 逐级寄存（见文件上部声明处注释），
+    // 绝不在 ID 重新查表比对，避免索引别名导致的漏判。
+    btb u_btb (
+        .clk                 (clk),
+        .resetn              (resetn),
+        .pc_if               (pc),
+        .pred_taken          (btb_pred_taken),
+        .pred_target         (btb_pred_target),
+        .update_en           (if_id_valid && id_is_control),
+        .update_pc           (if_id_pc),
+        .update_target       (bj_pc),
+        .update_taken        (id_taken),
+        .update_always_taken (inst_jal | inst_jalr)
+    );
 
     // 只有当前串行指令到达 WB 才能结束等待，避免保持在 ID 的项重复发射。
     assign serial_done = (flow_state == FLOW_SERIAL_RUN) &&
@@ -1276,10 +1518,18 @@ module mycpu_sync #(
             case (flow_state)
                 FLOW_RUN: if (irq_candidate)
                               flow_state <= FLOW_IRQ_DRAIN;
-                          else if (fetch_valid && serial_candidate)
+                          // 同拍已有重定向时不得启动串行排空：这一拍 ID 里的串行项
+                          // 属于错误路径，紧接着的 kill_if_id 会把唯一候选冲掉，
+                          // 而 DRAIN 的唯一出口 serial_issue 又依赖该候选。
+                          else if (fetch_valid && serial_candidate && !redirect_valid)
                               flow_state <= FLOW_SERIAL_DRAIN;
                 FLOW_SERIAL_DRAIN: if (serial_issue)
                                        flow_state <= FLOW_SERIAL_RUN;
+                                   // 候选被更年轻的重定向冲掉后，排空已经没有可发射的
+                                   // 对象，必须撤销回 RUN，否则 frontend_hold 永久为 1。
+                                   // 串行项一旦真正发射就转入 FLOW_SERIAL_RUN，不会到这里。
+                                   else if (!serial_candidate)
+                                       flow_state <= FLOW_RUN;
                 FLOW_SERIAL_RUN: if (serial_done)
                                      flow_state <= FLOW_IRQ_CHECK;
                 FLOW_IRQ_CHECK: flow_state <= irq_candidate ? FLOW_IRQ_DRAIN : FLOW_RUN;
@@ -1293,11 +1543,32 @@ module mycpu_sync #(
     assign perf_events[0] = normal_retire || mret_commit;
     assign perf_events[1] = trap_redirect_req || mret_redirect_req;
     assign perf_events[2] = flow_state != FLOW_RUN || serial_candidate || fault_inflight || irq_candidate;
-    assign perf_events[3] = data_pipeline_stall;
+    assign perf_events[3] = perf_memory_stall;
     assign perf_events[4] = if_id_valid && load_use;
     assign perf_events[5] = branch_redirect;
     assign perf_events[6] = fetch_valid && inst_if_id_accept && !inst_buffer_valid && !inst_response_good;
-    assign perf_events[7] = inst_if_id_accept && (inst_buffer_valid || inst_response_good);
+    assign perf_events[7] = branch_response_reuse ||
+                            (inst_if_id_accept && (inst_buffer_valid || inst_response_good));
     assign perf_branch_target = redirect_pc;
-    assign perf_fetch_pc = inst_buffer_valid ? inst_buffer_pc : inst_pending_pc;
+    assign perf_fetch_pc = branch_response_reuse ? inst_pending_pc :
+                           (inst_buffer_valid ? inst_buffer_pc : inst_pending_pc);
+    // 042 raw observation sideband: capture these together BEFORE comparing
+    // PCs in the MMIO observer. No diagnostic signal feeds pipeline control.
+    assign perf_diag_flags = (DIAG_PERF_ENABLE != 0) ?
+        {id_ex_needs_bus, ex_mul_ready, ex_mem_complete, ex_mem_valid,
+         older_fault_for_ex, id_ex_exc_valid, id_ex_br_taken, id_ex_valid,
+         inst_rsp_error, inst_buffer_error, inst_buffer_valid, inst_rsp_valid,
+         inst_pending, (trap_redirect_req || mret_redirect_req), branch_redirect} : 15'b0;
+    assign perf_diag_target_pc = (DIAG_PERF_ENABLE != 0) ? id_ex_br_target : 32'b0;
+    assign perf_diag_pending_pc = (DIAG_PERF_ENABLE != 0) ? inst_pending_pc : 32'b0;
+    assign perf_diag_buffer_pc = (DIAG_PERF_ENABLE != 0) ? inst_buffer_pc : 32'b0;
+    // 046 observation begin: raw levels only, no fanback into CPU control.
+    assign perf_detail_cpu = (DETAIL_PERF_ENABLE != 0) ?
+        {3'b0, data_rsp_valid,
+         (normal_retire && mem_wb_inst[6:0] == 7'b0110011 &&
+          mem_wb_inst[31:25] == 7'b0000001 && !mem_wb_inst[14]),
+         mul_done, mul_busy, mul_start, (kill_id_ex || ex_exc_valid),
+         older_fault_for_ex, ex_mem_ready, ex_mul_ready, id_ex_mul, id_ex_valid,
+         (id_ex_valid && id_ex_needs_bus && !data_req_ready),
+         (ex_mem_valid && !ex_mem_complete)} : 16'b0;
 endmodule

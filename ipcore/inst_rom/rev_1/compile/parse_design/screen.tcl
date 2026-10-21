@@ -1,0 +1,1 @@
+.rtl_screen -top_module {inst_rom} -include_path {<D:/riscv/RISCV/ipcore/inst_rom/rev_1>} -design_files {<D:/riscv/RISCV/ipcore/inst_rom/rtl/ipm2l_rom_v1_8_inst_rom.v|work><D:/riscv/RISCV/ipcore/inst_rom/rtl/ipm2l_spram_v1_8_inst_rom.v|work><D:/riscv/RISCV/ipcore/inst_rom/inst_rom.v|work>}

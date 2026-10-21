@@ -1,0 +1,8 @@
+{
+  "status": "LOCAL_DATA_PREPARATION_REVIEW_PASS",
+  "source_files_checked": 5339,
+  "split_disjoint": true,
+  "rgb96_gray32_pairs_checked": 5339,
+  "dataset_metadata_sha256": "44e18a2ad819fd04a636dca5ecc3fdc07aecf3685fc2b2b867a7146982f6051e",
+  "camera_accuracy_verified": false
+}

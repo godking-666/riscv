@@ -1,0 +1,14 @@
+ELF       : D:\riscv\RISCV\tests\bsp_workflow\build_onchip\onchip_27m_20261012\performance_300\program.elf
+alloc secs: 4  (exec 1 / data 3)
+
+--- 指令 ROM 镜像 -> D:\riscv\RISCV\tests\bsp_workflow\build_onchip\onchip_27m_20261012\performance_300\inst_rom.dat
+    .text                    0x00000000   13056 B  EXEC PROGBITS(有初值)    非零字 3264
+    used 3264 / 4096 words  (13056 / 16384 bytes)
+
+--- 数据 RAM 镜像 -> D:\riscv\RISCV\tests\bsp_workflow\build_onchip\onchip_27m_20261012\performance_300\data_ram.dat
+    .rodata                  0x00000000    2232 B  DATA PROGBITS(有初值)    非零字 533
+    .data                    0x000008b8      16 B  DATA PROGBITS(有初值)    非零字 4
+    .bss                     0x000008c8    2068 B  DATA NOBITS(零填充)      非零字 0
+    used 1079 / 4096 words  (4316 / 16384 bytes)
+
+RESULT: OK

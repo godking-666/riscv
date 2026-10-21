@@ -1,0 +1,369 @@
+Archive member included to satisfy reference by file (symbol)
+
+D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o (__udivsi3)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .text.bt_uart_getc
+                0x00000000       0x24 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.memcpy   0x00000000       0x54 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.memmove  0x00000000       0x58 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.memset   0x00000000       0x58 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.memcmp   0x00000000       0x30 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.strlen   0x00000000       0x1c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.strcpy   0x00000000       0x1c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text.strcmp   0x00000000       0x24 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .riscv.attributes
+                0x00000000       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccDbs1PU.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccDbs1PU.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccDbs1PU.o
+ .data          0x00000000        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .bss           0x00000000        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ROM              0x00000000         0x00004000         xr
+RAMDATA          0x00000000         0x00001800         xrw
+RAMTEST          0x00001800         0x00001000         rw
+STACK            0x00002800         0x00001800         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\cclH1Kuh.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccDbs1PU.o
+                0x00002800                        _stack_bottom = ORIGIN (STACK)
+                0x00004000                        _stack_top = (ORIGIN (STACK) + LENGTH (STACK))
+                0x00001800                        PROVIDE (__ramtest_start = ORIGIN (RAMTEST))
+                0x00002800                        PROVIDE (__ramtest_end = (ORIGIN (RAMTEST) + LENGTH (RAMTEST)))
+
+.text           0x00000000     0x1818
+                0x00000000                        . = ALIGN (0x4)
+ *(.text.start)
+ .text.start    0x00000000      0x114 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccDbs1PU.o
+                0x00000000                _start
+                0x00000074                bt_trap_entry
+ *(.text .text.*)
+ .text.startup.main
+                0x00000114      0x1d0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+                0x00000114                main
+ .text.emit_uint
+                0x000002e4      0x128 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .text.bt_vformat
+                0x0000040c      0x2c0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .text.out_bounded
+                0x000006cc       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .text.bt_putc  0x00000700       0x78 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x00000700                bt_putc
+ .text.out_uart
+                0x00000778        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .text.bt_puts  0x0000077c       0x34 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x0000077c                bt_puts
+ .text.bt_printf
+                0x000007b0       0x4c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x000007b0                bt_printf
+ .text.bt_note  0x000007fc       0x60 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x000007fc                bt_note
+ .text.bt_uart_status
+                0x0000085c       0x10 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x0000085c                bt_uart_status
+ .text.bt_uart_tx_ready
+                0x0000086c       0x10 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x0000086c                bt_uart_tx_ready
+ .text.bt_cycle
+                0x0000087c        0xc C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x0000087c                bt_cycle
+ .text.t_ram_half_lanes
+                0x00000888       0xc4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_ram_byte_lanes
+                0x0000094c       0xa4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_ram_addr_in_addr
+                0x000009f0       0xb0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_ram_walking1
+                0x00000aa0      0x154 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_cpu_branch
+                0x00000bf4       0x64 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_cpu_alu
+                0x00000c58      0x314 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_uart_rx_irq
+                0x00000f6c      0x120 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_ddr_alias
+                0x0000108c       0xe0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_ddr_window
+                0x0000116c       0xe4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_trap_mmio_offset
+                0x00001250       0x88 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_trap_load_unmapped
+                0x000012d8       0x84 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_mmio_cycle
+                0x0000135c       0x7c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_mmio_scratch
+                0x000013d8      0x100 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_uart_tx
+                0x000014d8       0x5c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_uart_present
+                0x00001534       0x5c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_trap_misaligned
+                0x00001590       0x70 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_trap_illegal
+                0x00001600       0x70 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.t_mmio_id
+                0x00001670       0x68 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .text.bt_trap_reset
+                0x000016d8       0x14 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x000016d8                bt_trap_reset
+ .text.bt_trap_fired
+                0x000016ec        0xc C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x000016ec                bt_trap_fired
+ .text.bt_trap_handler
+                0x000016f8       0x6c C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x000016f8                bt_trap_handler
+ .text          0x00001764       0xb4 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                0x00001764                __divsi3
+                0x0000176c                __udivsi3
+                0x0000176c                __hidden___udivsi3
+                0x000017b4                __umodsi3
+                0x000017e8                __modsi3
+                0x00001818                        . = ALIGN (0x4)
+                0x00001818                        __text_end = .
+
+.sdata          0x00000000        0x0
+                0x00000000                        . = ALIGN (0x4)
+                0x00000000                        __sdata_start = .
+                0x00000800                        PROVIDE (__global_pointer$ = (. + 0x800))
+ *(.sdata .sdata.*)
+ *(.sdata2 .sdata2.*)
+                0x00000000                        . = ALIGN (0x4)
+                0x00000000                        __sdata_end = .
+
+.sbss           0x00000000       0x28
+                0x00000000                        . = ALIGN (0x4)
+                0x00000000                        __sbss_start = .
+ *(.sbss .sbss.*)
+ .sbss.g_console_ok
+                0x00000000        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x00000000                g_console_ok
+ .sbss.g_want   0x00000004        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .sbss.g_got    0x00000008        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .sbss.g_sub    0x0000000c        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .sbss.g_irq_byte
+                0x00000010        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x00000010                g_irq_byte
+ .sbss.g_irq_count
+                0x00000014        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x00000014                g_irq_count
+ .sbss.g_trap_tval
+                0x00000018        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x00000018                g_trap_tval
+ .sbss.g_trap_epc
+                0x0000001c        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x0000001c                g_trap_epc
+ .sbss.g_trap_cause
+                0x00000020        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x00000020                g_trap_cause
+ .sbss.g_trap_count
+                0x00000024        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+                0x00000024                g_trap_count
+ *(.sbss2 .sbss2.*)
+                0x00000028                        . = ALIGN (0x4)
+                0x00000028                        __sbss_end = .
+
+.data           0x00000028        0x0
+                0x00000028                        . = ALIGN (0x4)
+                0x00000028                        __data_start = .
+ *(.data .data.*)
+                0x00000028                        . = ALIGN (0x4)
+                0x00000028                        __data_end = .
+
+.rodata         0x00000028     0x107c
+                0x00000028                        . = ALIGN (0x4)
+                0x00000028                        __rodata_start = .
+ *(.rodata .rodata.*)
+ .rodata.main.str1.4
+                0x00000028      0xfe6 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+                                0x24d (size before relaxing)
+ .rodata.emit_uint.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                                 0x25 (size before relaxing)
+ .rodata.bt_vformat.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                                  0x7 (size before relaxing)
+ .rodata.t_ram_half_lanes.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xd7 (size before relaxing)
+ .rodata.t_ram_byte_lanes.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x84 (size before relaxing)
+ .rodata.t_ram_addr_in_addr.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x64 (size before relaxing)
+ .rodata.t_ram_walking1.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x91 (size before relaxing)
+ .rodata.t_cpu_branch.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x71 (size before relaxing)
+ .rodata.t_cpu_alu.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x9d (size before relaxing)
+ .rodata.t_uart_rx_irq.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xa1 (size before relaxing)
+ .rodata.t_ddr_alias.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x99 (size before relaxing)
+ .rodata.t_ddr_window.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xd4 (size before relaxing)
+ .rodata.t_trap_mmio_offset.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xba (size before relaxing)
+ .rodata.t_trap_load_unmapped.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xab (size before relaxing)
+ .rodata.t_mmio_cycle.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x7d (size before relaxing)
+ .rodata.t_mmio_scratch.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                0x141 (size before relaxing)
+ .rodata.t_uart_tx.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xbd (size before relaxing)
+ .rodata.t_uart_present.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xb1 (size before relaxing)
+ .rodata.t_trap_misaligned.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x8b (size before relaxing)
+ .rodata.t_trap_illegal.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0xcf (size before relaxing)
+ .rodata.t_mmio_id.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                 0x71 (size before relaxing)
+ .rodata.str1.4
+                0x0000100e        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                                0x19e (size before relaxing)
+ *fill*         0x0000100e        0x2 
+ .rodata.bt_cases
+                0x00001010       0x90 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                0x00001010                bt_cases
+ *(.rodata1)
+ *(.srodata .srodata.*)
+ .srodata.bt_case_count
+                0x000010a0        0x4 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+                0x000010a0                bt_case_count
+                0x000010a4                        . = ALIGN (0x4)
+                0x000010a4                        __rodata_end = .
+
+.rela.dyn       0x000010a4        0x0
+ .rela.text.t_ram_half_lanes
+                0x000010a4        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .rela.text.t_ram_byte_lanes
+                0x000010a4        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .rela.text.t_ram_addr_in_addr
+                0x000010a4        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .rela.text.t_ram_walking1
+                0x000010a4        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .rela.text.t_trap_misaligned
+                0x000010a4        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .rela.text.start
+                0x000010a4        0x0 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+
+.bss            0x000010a4       0x70
+                0x000010a4                        . = ALIGN (0x4)
+                0x000010a4                        __bss_start = .
+ *(.bss .bss.*)
+ .bss.g_bt_detail
+                0x000010a4       0x70 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+                0x000010a4                g_bt_detail
+ *(COMMON)
+                0x00001114                        . = ALIGN (0x4)
+                0x00001114                        __bss_end = .
+                0x00001114                        __ram_data_end = .
+                0x00000028                        __data_lma = LOADADDR (.data)
+
+/DISCARD/
+ *(.comment)
+ *(.note .note.*)
+ *(.eh_frame .eh_frame_hdr)
+                0x00000001                        ASSERT ((__text_end <= (ORIGIN (ROM) + LENGTH (ROM))), ERROR: .text exceeds the 16 KiB on-chip ROM.)
+                0x00000001                        ASSERT ((__ram_data_end <= ORIGIN (RAMTEST)), ERROR: program data grew into the RAM test region; shrink it or move RAMTEST up.)
+                0x00000001                        ASSERT (((__sbss_end - __sdata_start) <= 0x1000), ERROR: small-data is larger than 4 KiB, gp-relative addressing may go out of range.)
+LOAD D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a
+OUTPUT(C:/Users/Lenovo/Documents/deepseek-harness/default-workspace/boardtest/build/boardtest.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x00000000       0x29
+ .riscv.attributes
+                0x00000000       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccVp5OVg.o
+ .riscv.attributes
+                0x00000025       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccJyQFJe.o
+ .riscv.attributes
+                0x0000004a       0x29 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccjgFDpq.o
+ .riscv.attributes
+                0x00000073       0x25 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccvzDX0L.o
+ .riscv.attributes
+                0x00000098       0x27 C:\Users\Lenovo\AppData\Local\Temp\dsh-kN8uj5\ccDbs1PU.o
+ .riscv.attributes
+                0x000000bf       0x1a D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_line     0x00000000      0x153
+ .debug_line    0x00000000      0x153 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_line_str
+                0x00000000      0x18b
+ .debug_line_str
+                0x00000000      0x18b D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_info     0x00000000       0x5f
+ .debug_info    0x00000000       0x5f D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_abbrev   0x00000000       0x28
+ .debug_abbrev  0x00000000       0x28 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_aranges  0x00000000       0x20
+ .debug_aranges
+                0x00000000       0x20 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_str      0x00000000      0x1c6
+ .debug_str     0x00000000      0x1c6 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                                0x1d0 (size before relaxing)

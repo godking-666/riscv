@@ -1,0 +1,331 @@
+Archive member included to satisfy reference by file (symbol)
+
+D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o (__mulsi3)
+D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                              C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o (__udivsi3)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .text.puts     0x00000000       0x58 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .text.uart_getchar
+                0x00000000       0x74 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .text.uart_irq_enable
+                0x00000000       0x20 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .text.uart_irq_disable
+                0x00000000       0x18 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .text          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .data          0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .bss           0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .comment       0x00000000       0x34 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .data          0x00000000        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .bss           0x00000000        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .data          0x00000000        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+ .bss           0x00000000        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+PROGRAM          0x40000000         0x0000f000         xrw
+STACK            0x4000f000         0x00001000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+LOAD C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+LOAD D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a
+
+.text           0x40000000      0xa5c
+ *(.text.startup)
+ .text.startup  0x40000000       0x84 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+                0x40000000                _start
+                0x40000080                program_return
+ *(.text .text.*)
+ .text.trap     0x40000084      0x19c C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+                0x40000084                trap_entry
+                0x400001a8                bsp_trap_probe
+ .text.trap_dispatch
+                0x40000220       0x88 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                0x40000220                trap_dispatch
+ .text.bsp_check
+                0x400002a8       0x9c C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                0x400002a8                bsp_check
+ .text.putchar  0x40000344       0x24 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+                0x40000344                putchar
+ .text.number   0x40000368      0x10c C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .text.printf   0x40000474      0x220 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+                0x40000474                printf
+ .text.uart_irq_service
+                0x40000694       0x5c C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+                0x40000694                uart_irq_service
+ .text.timer_cycles
+                0x400006f0        0xc C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+                0x400006f0                timer_cycles
+ .text.timer_delay_us
+                0x400006fc       0xd4 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+                0x400006fc                timer_delay_us
+ .text.crc32_update
+                0x400007d0       0x44 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+                0x400007d0                crc32_update
+ .text.crc32    0x40000814       0x2c C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+                0x40000814                crc32
+ .text.startup.main
+                0x40000840      0x144 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+                0x40000840                main
+ .text          0x40000984       0x24 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                0x40000984                __mulsi3
+ .text          0x400009a8       0xb4 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                0x400009a8                __divsi3
+                0x400009b0                __udivsi3
+                0x400009b0                __hidden___udivsi3
+                0x400009f8                __umodsi3
+                0x40000a2c                __modsi3
+
+.rodata         0x40000a5c       0x9e
+ *(.rodata .rodata.* .srodata .srodata.*)
+ .rodata.trap_dispatch.str1.4
+                0x40000a5c       0x9e C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                                 0x2a (size before relaxing)
+ .rodata.printf.str1.4
+                0x40000afa        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+                                  0x7 (size before relaxing)
+ .rodata.main.str1.4
+                0x40000afa        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+                                 0x6a (size before relaxing)
+
+.rela.dyn       0x40000afc        0x0
+ .rela.text.startup
+                0x40000afc        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+
+.data           0x40000afc        0x4
+                0x40000afc                        __data_start = .
+ *(.data .data.* .sdata .sdata.*)
+ .data.bsp_data_magic
+                0x40000afc        0x4 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                0x40000afc                bsp_data_magic
+                0x40000b00                        . = ALIGN (0x4)
+                0x40000b00                        __data_end = .
+                0x40000afc                        __data_load_start = LOADADDR (.data)
+                0x400012fc                        __global_pointer$ = (__data_start + 0x800)
+
+.bss            0x40000b00      0x130
+                0x40000b00                        __bss_start = .
+ *(.bss .bss.* .sbss .sbss.*)
+ .bss.bsp_irqs  0x40000b00        0x4 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                0x40000b00                bsp_irqs
+ .bss.bsp_ecalls
+                0x40000b04        0x4 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                0x40000b04                bsp_ecalls
+ .bss.rx_tail   0x40000b08        0x4 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .bss.rx_head   0x40000b0c        0x4 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .bss.rx_queue  0x40000b10       0x20 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .bss.bytes     0x40000b30      0x100 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ *(COMMON)
+                0x40000c30                        . = ALIGN (0x4)
+                0x40000c30                        __bss_end = .
+                0x4000f000                        __stack_bottom = ORIGIN (STACK)
+                0x40010000                        __stack_top = (ORIGIN (STACK) + LENGTH (STACK))
+                0x00000001                        ASSERT ((__bss_end <= __stack_bottom), Application overlaps stack)
+
+/DISCARD/
+ *(.comment)
+ *(.eh_frame .eh_frame.*)
+OUTPUT(D:\riscv\RISCV\tests\bsp_workflow\build_versions\verify_20261011\crc32\program.elf elf32-littleriscv)
+
+.riscv.attributes
+                0x00000000       0x1c
+ .riscv.attributes
+                0x00000000       0x1a C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .riscv.attributes
+                0x0000001a       0x1a C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .riscv.attributes
+                0x00000034       0x1c C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .riscv.attributes
+                0x00000050       0x1c C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .riscv.attributes
+                0x0000006c       0x1c C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .riscv.attributes
+                0x00000088       0x1c C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .riscv.attributes
+                0x000000a4       0x1c C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .riscv.attributes
+                0x000000c0       0x1a D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .riscv.attributes
+                0x000000da       0x1a D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.note.GNU-stack
+                0x00000000        0x0
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .note.GNU-stack
+                0x00000000        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+
+.debug_line     0x00000000     0x1398
+ .debug_line    0x00000000       0xc0 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .debug_line    0x000000c0      0x24c C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .debug_line    0x0000030c      0x20d C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_line    0x00000519      0x7f2 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_line    0x00000d0b      0x17f C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_line    0x00000e8a      0x166 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_line    0x00000ff0      0x1db C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .debug_line    0x000011cb       0x7a D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_line    0x00001245      0x153 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_line_str
+                0x00000000      0x356
+ .debug_line_str
+                0x00000000      0x356 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+                                 0x73 (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+                                 0x70 (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                                0x103 (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+                                0x106 (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+                                 0xff (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+                                 0xff (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+                                0x10f (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                                0x18e (size before relaxing)
+ .debug_line_str
+                0x00000356        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                                0x18b (size before relaxing)
+
+.debug_info     0x00000000      0xc3e
+ .debug_info    0x00000000       0x25 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .debug_info    0x00000025       0x25 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .debug_info    0x0000004a      0x206 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_info    0x00000250      0x41e C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_info    0x0000066e      0x16e C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_info    0x000007dc      0x17c C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_info    0x00000958      0x256 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .debug_info    0x00000bae       0x31 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_info    0x00000bdf       0x5f D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_abbrev   0x00000000      0x681
+ .debug_abbrev  0x00000000       0x14 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .debug_abbrev  0x00000014       0x14 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .debug_abbrev  0x00000028      0x15f C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_abbrev  0x00000187      0x1c6 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_abbrev  0x0000034d       0xef C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_abbrev  0x0000043c       0xcc C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_abbrev  0x00000508      0x129 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .debug_abbrev  0x00000631       0x28 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_abbrev  0x00000659       0x28 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_aranges  0x00000000      0x170
+ .debug_aranges
+                0x00000000       0x20 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+ .debug_aranges
+                0x00000020       0x20 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+ .debug_aranges
+                0x00000040       0x28 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_aranges
+                0x00000068       0x58 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_aranges
+                0x000000c0       0x28 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_aranges
+                0x000000e8       0x28 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_aranges
+                0x00000110       0x20 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+ .debug_aranges
+                0x00000130       0x20 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+ .debug_aranges
+                0x00000150       0x20 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+
+.debug_str      0x00000000      0x595
+ .debug_str     0x00000000      0x595 C:\Users\Lenovo\AppData\Local\Temp\ccRXBUO3.o
+                                 0x7f (size before relaxing)
+ .debug_str     0x00000595        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccobLl9r.o
+                                 0x7c (size before relaxing)
+ .debug_str     0x00000595        0x0 C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+                                0x1d9 (size before relaxing)
+ .debug_str     0x00000595        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+                                0x21f (size before relaxing)
+ .debug_str     0x00000595        0x0 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+                                0x189 (size before relaxing)
+ .debug_str     0x00000595        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+                                0x164 (size before relaxing)
+ .debug_str     0x00000595        0x0 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+                                0x188 (size before relaxing)
+ .debug_str     0x00000595        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(muldi3.o)
+                                0x1a3 (size before relaxing)
+ .debug_str     0x00000595        0x0 D:/riscv/tools/xpack-riscv-none-elf-gcc-15.2.0-1/bin/../lib/gcc/riscv-none-elf/15.2.0/rv32i/ilp32\libgcc.a(div.o)
+                                0x1d0 (size before relaxing)
+
+.debug_loclists
+                0x00000000      0x682
+ .debug_loclists
+                0x00000000      0x11b C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_loclists
+                0x0000011b      0x3b1 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_loclists
+                0x000004cc       0x49 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_loclists
+                0x00000515       0xea C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_loclists
+                0x000005ff       0x83 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+
+.debug_rnglists
+                0x00000000      0x115
+ .debug_rnglists
+                0x00000000       0x1b C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_rnglists
+                0x0000001b       0x7e C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_rnglists
+                0x00000099       0x40 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_rnglists
+                0x000000d9       0x28 C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_rnglists
+                0x00000101       0x14 C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o
+
+.debug_frame    0x00000000      0x228
+ .debug_frame   0x00000000       0x5c C:\Users\Lenovo\AppData\Local\Temp\cchcEEoV.o
+ .debug_frame   0x0000005c      0x100 C:\Users\Lenovo\AppData\Local\Temp\ccKZmEiv.o
+ .debug_frame   0x0000015c       0x54 C:\Users\Lenovo\AppData\Local\Temp\cc777cDa.o
+ .debug_frame   0x000001b0       0x3c C:\Users\Lenovo\AppData\Local\Temp\ccMBZ1pU.o
+ .debug_frame   0x000001ec       0x3c C:\Users\Lenovo\AppData\Local\Temp\ccb7PdWI.o

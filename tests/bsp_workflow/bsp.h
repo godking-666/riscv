@@ -2,11 +2,7 @@
 #define BSP_H
 #include <stdint.h>
 #include <stdarg.h>
-/* 新板(PG2L200H-6IFBB676) 系统时钟 27MHz（D18，手册 1.3.2.5）；
- * 旧板 RK3568_MES2L100H 是 93.75MHz。可用 -DBSP_CLOCK_HZ=... 覆盖。 */
-#ifndef BSP_CLOCK_HZ
-#define BSP_CLOCK_HZ 27000000u
-#endif
+#define BSP_CLOCK_HZ 93750000u
 #define BSP_DATA_MAGIC 0x42da7a11u
 extern volatile uint32_t bsp_data_magic,bsp_ecalls,bsp_irqs;
 int putchar(int c);

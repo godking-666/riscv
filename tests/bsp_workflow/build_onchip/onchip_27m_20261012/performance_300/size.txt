@@ -1,0 +1,2 @@
+   text	   data	    bss	    dec	    hex	filename
+  15288	     16	   2068	  17372	   43dc	D:\riscv\RISCV\tests\bsp_workflow\build_onchip\onchip_27m_20261012\performance_300\program.elf
