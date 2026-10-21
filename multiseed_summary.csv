@@ -3,26 +3,26 @@ project name,RISCV.pds
 
 Multi Place Seed:
 Seed,State,Convergence,Setup(Slow),Setup(Fast),Hold(Slow),Hold(Fast),Recovery(Slow),Recovery(Fast),Removal(Slow),Removal(Fast),PBM-GP,PBM-PreGP,PBM-PostGP,LP,Total Placement Cpu Time,Detailed routing,Total Routing Cpu Time,Wire Length After Post-GP,Wire Length After LP,Wire Length After DP,Routing Arc Length,Worst Slack After GP Timing,Worst Slack After LP Timing,Worst Slack Before RP,Worst Slack Before DP,Worst Slack After DP,Worst Slack After Placement,Worst Slack After TA By Preroute,TNS After DP,TNS Before Route,Setup(Slow) Total Failing TNS,Setup(Slow) Total Failing Endpoints,Hold(Slow) Total Failing THS,Hold(Slow) Total Failing Endpoints,Power
-seed_2,OK,OK,0.443,2.084,0.143,0.099,3.367,5.968,0.270,0.182,1.05,NA,0.00,0.58,96.72,346.82,453.56,NA,NA,NA,431021,NA,NA,-944,-944,713,722,NA,0,NA,0.000,0,0.000,0,NA
-seed_4,OK,OK,0.413,2.084,0.144,0.099,4.596,6.743,0.349,0.237,1.31,NA,0.00,1.09,136.39,321.45,389.91,NA,NA,NA,425266,NA,NA,-1333,-957,599,599,NA,0,NA,0.000,0,0.000,0,NA
-seed_3,OK,OK,0.378,2.084,0.146,0.099,2.977,5.677,0.262,0.176,1.00,NA,0.00,0.70,148.11,392.33,463.14,NA,NA,NA,429437,NA,NA,-1130,-990,754,758,NA,0,NA,0.000,0,0.000,0,NA
-seed_5,OK,OK,0.397,2.084,0.140,0.097,4.042,6.260,0.327,0.218,1.28,NA,0.00,0.48,157.64,410.59,477.36,NA,NA,NA,434473,NA,NA,-1209,-960,433,457,NA,0,NA,0.000,0,0.000,0,NA
+seed_3,OK,OK,0.633,2.084,0.143,0.099,4.909,6.196,0.364,0.247,1.30,NA,0.00,0.33,33.48,209.80,278.18,NA,NA,NA,369245,NA,NA,305,305,1065,1065,NA,0,NA,0.000,0,0.000,0,NA
+seed_5,OK,OK,0.520,2.084,0.148,0.097,5.220,6.432,0.366,0.249,1.28,NA,0.00,0.69,36.06,214.67,286.50,NA,NA,NA,365289,NA,NA,161,161,1002,1011,NA,0,NA,0.000,0,0.000,0,NA
+seed_4,OK,OK,0.321,2.084,0.137,0.099,4.658,5.917,0.367,0.249,1.00,NA,0.00,0.42,34.39,209.42,287.25,NA,NA,NA,366834,NA,NA,279,279,1050,1053,NA,0,NA,0.000,0,0.000,0,NA
+seed_2,OK,OK,0.559,2.084,0.144,0.099,4.859,6.020,0.363,0.247,1.47,NA,0.00,0.44,33.17,271.79,336.29,NA,NA,NA,369270,NA,NA,65,65,1002,1008,NA,0,NA,0.000,0,0.000,0,NA
 Pass Rate/Convergence Rate,100.00%,100.00%
 
 Synthesize:
-control_set,740
+control_set,611
 Synthesize Performance Summary:
 slack category,Synthesize Setup WNS,Synthesize Setup TNS,Synthesize Recovery WNS,Synthesize Recovery TNS
-slack value,-1.139,-392.895,4.968,0.000
-Synthesize Process Cpu Time,0h:0m:54s
+slack value,0.288,0.000,5.824,0.000
+Synthesize Process Cpu Time,0h:0m:21s
 
 Device Map:
 Device Map Resource Usage Summary:
 Logic Utilization,LUT,FF,DRM,APM,Distributed RAM,HSSTHP,USCM,HCKB,RCKB
-Used,22572,23544,27.5,8,53,NA,6,0,2
+Used,20569,19804,27.5,8,53,NA,6,0,2
 Available,159800,319600,415,740,39500,NA,32,120,40
-Utilization(%),15%,8%,7%,2%,1%,NA,19%,0%,5%
-Device Map Process Cpu Time,0h:0m:39s
+Utilization(%),13%,7%,7%,2%,1%,NA,19%,0%,5%
+Device Map Process Cpu Time,0h:0m:3s
 
 Project Configurations:
 top module,board_top

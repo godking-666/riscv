@@ -130,22 +130,6 @@ module mycpu_sync #(
     reg [31:0] if_id_pc;
     reg if_id_valid;
     reg if_id_access_fault;
-
-    // ==================== BTB 分支预测（新增，见文件末尾 btb 例化）====================
-    // ★ 设计要点：**预测必须跟着指令一起存下来**，不能在 ID 级重新查 BTB 来判断预测对错。
-    //   原因：BTB 条目可能在"IF 预测"和"ID 判定"之间被别的指令改写（索引别名），
-    //   导致重查结果与实际预测不一致；若恰好让 id_mispredict 漏判，
-    //   就会执行错误路径且不纠正 —— 这是正确性事故。
-    //   所以预测结果沿 请求→缓冲→IF/ID 三级逐级寄存。
-    wire        btb_pred_taken;      // 对 pc 的预测
-    wire [31:0] btb_pred_target;
-    reg         pend_pred_taken;     // 在飞请求（inst_pending_pc）的预测
-    reg  [31:0] pend_pred_target;
-    reg         ibuf_pred_taken;     // 指令缓冲里的预测
-    reg  [31:0] ibuf_pred_target;
-    reg         if_id_pred_taken;    // IF/ID 里这条指令当初被预测成什么
-    reg  [31:0] if_id_pred_target;
-
     wire [31:0] inst;
     wire [6:0] opcode;
     wire [2:0] funct3;
@@ -436,10 +420,7 @@ module mycpu_sync #(
                   (inst_req_fire ? branch_target_next_pc + 32'd4 : branch_target_next_pc) :
                   ((branch_fetch_redirect && inst_req_fire) ? branch_target_next_pc : redirect_pc);
         else if (inst_req_fire)
-            // ★ BTB 预测：命中且计位器偏 taken 就取目标，否则顺序 +4。
-            // 注意 inst_req_addr 在非重定向路径下就等于 pc，所以这里的预测
-            // 与下方锁存的 pend_pred_* 是同一条指令的同一个预测。
-            pc <= btb_pred_taken ? btb_pred_target : (pc + 32'd4);
+            pc <= pc + 32'd4;
     end
 
     // 单 outstanding 请求跟踪。重定向不能撤销已接受请求，所以把它标记为
@@ -449,8 +430,6 @@ module mycpu_sync #(
             inst_pending      <= 1'b0;
             inst_pending_pc   <= 32'b0;
             inst_pending_drop <= 1'b0;
-            pend_pred_taken   <= 1'b0;
-            pend_pred_target  <= 32'b0;
         end else begin
             if (inst_pending && inst_rsp_valid) begin
                 inst_pending      <= 1'b0;
@@ -462,10 +441,6 @@ module mycpu_sync #(
                 inst_pending      <= 1'b1;
                 inst_pending_pc   <= inst_req_addr;
                 inst_pending_drop <= 1'b0;
-                // 预测跟着这条请求走。重定向路径下预测不参与决策
-                //（redirect 本身是权威），但照存不误，保持一致。
-                pend_pred_taken   <= btb_pred_taken;
-                pend_pred_target  <= btb_pred_target;
             end
         end
     end
@@ -477,8 +452,6 @@ module mycpu_sync #(
             inst_buffer_pc    <= 32'b0;
             inst_buffer_data  <= 32'b0;
             inst_buffer_error <= 1'b0;
-            ibuf_pred_taken   <= 1'b0;
-            ibuf_pred_target  <= 32'b0;
         end else begin
             if (inst_buffer_pop)
                 inst_buffer_valid <= 1'b0;
@@ -487,9 +460,6 @@ module mycpu_sync #(
                 inst_buffer_pc    <= inst_pending_pc;
                 inst_buffer_data  <= inst_rsp_rdata;
                 inst_buffer_error <= inst_rsp_error;
-                // 预测随指令进缓冲，出缓冲时再随指令进 IF/ID
-                ibuf_pred_taken   <= pend_pred_taken;
-                ibuf_pred_target  <= pend_pred_target;
             end
         end
     end
@@ -506,8 +476,6 @@ module mycpu_sync #(
             if_id_pc <= 32'h00000000;
             if_id_valid <= 1'b0;
             if_id_access_fault <= 1'b0;
-            if_id_pred_taken <= 1'b0;
-            if_id_pred_target <= 32'h0;
         end
         else if (branch_response_reuse) begin
             // Consume the OLD pending response on this redirect edge; a new
@@ -518,8 +486,6 @@ module mycpu_sync #(
             if_id_pc <= inst_pending_pc;
             if_id_valid <= 1'b1;
             if_id_access_fault <= 1'b0;
-            if_id_pred_taken <= pend_pred_taken;
-            if_id_pred_target <= pend_pred_target;
         end
         else if (kill_if_id) begin
             // 分支/trap 重定向或串行发射清除已经消费/失效的 ID 项。
@@ -527,40 +493,30 @@ module mycpu_sync #(
             if_id_pc <= 32'hFFFF_FFFF;                         // 哨兵:波形上一眼认出气泡
             if_id_valid <= 1'b0;
             if_id_access_fault <= 1'b0;
-            if_id_pred_taken <= 1'b0;
-            if_id_pred_target <= 32'h0;
         end
         else if (frontend_hold) begin
             if_id_inst <= if_id_inst;
             if_id_pc <= if_id_pc;
             if_id_valid <= if_id_valid;
             if_id_access_fault <= if_id_access_fault;
-            if_id_pred_taken <= if_id_pred_taken;
-            if_id_pred_target <= if_id_pred_target;
         end
         else if (inst_buffer_valid) begin
             if_id_inst <= inst_buffer_data;
             if_id_pc <= inst_buffer_pc;
             if_id_valid <= 1'b1;
             if_id_access_fault <= inst_buffer_error;
-            if_id_pred_taken <= ibuf_pred_taken;
-            if_id_pred_target <= ibuf_pred_target;
         end
         else if (inst_response_good) begin
             if_id_inst <= inst_rsp_rdata;
             if_id_pc <= inst_pending_pc;
             if_id_valid <= 1'b1;
             if_id_access_fault <= inst_rsp_error;
-            if_id_pred_taken <= pend_pred_taken;
-            if_id_pred_target <= pend_pred_target;
         end
         else begin
             if_id_inst <= 32'h0000_0013;
             if_id_pc <= 32'hFFFF_FFFF;
             if_id_valid <= 1'b0;
             if_id_access_fault <= 1'b0;
-            if_id_pred_taken <= 1'b0;
-            if_id_pred_target <= 32'h0;
         end
     end
 
@@ -1461,48 +1417,13 @@ module mycpu_sync #(
     // 普通分支的重定向改由 EX 级产生（ex_br_redirect）：ID 只在发射时把
     // taken/target 存进 ID/EX，等指令真正能前进到 EX/MEM 的那一拍才改 PC。
     assign branch_redirect = ex_br_redirect;
-
-    // ★ BTB 误预测重定向（新增）。
-    // 原设计只在 id_ex_br_taken 时重定向 —— 若 BTB 预测"跳"而实际"不跳"，
-    // 就没有任何机制把 PC 拉回顺序路径，会执行错误指令。所以必须补这一条。
-    //
-    // 判定：拿 ID 里这条指令当初"被预测成什么"(if_id_pred_*) 与"实际是什么"(id_taken/bj_pc) 比对。
-    //   ① 预测 taken != 实际 taken        -> 误预测
-    //   ② 都 taken 但目标不同             -> 误预测
-    //   （都 not-taken 时取的是顺序路径，无需纠正）
-    wire id_is_control = inst_bne | inst_beq | inst_blt | inst_bge |
-                         inst_bltu | inst_bgeu | inst_jal | inst_jalr;
-    wire id_mispredict = if_id_valid && id_is_control && !load_use &&
-                         ((if_id_pred_taken != id_taken) ||
-                          (id_taken && (bj_pc != if_id_pred_target)));
-
-    assign redirect_valid = trap_redirect_req || mret_redirect_req ||
-                            id_mispredict || branch_redirect;
+    assign redirect_valid = trap_redirect_req || mret_redirect_req || branch_redirect;
     assign redirect_pc = trap_redirect_req ? trap_redirect_target :
-                         mret_redirect_req ? mret_redirect_target :
-                         id_mispredict     ? (id_taken ? bj_pc : (if_id_pc + 32'd4)) :
-                                             id_ex_br_target;
+                         mret_redirect_req ? mret_redirect_target : id_ex_br_target;
     assign kill_if_id = redirect_valid || serial_issue;
     assign kill_id_ex = trap_redirect_req || mret_redirect_req;
     assign kill_ex_mem = trap_redirect_req || mret_redirect_req;
     assign kill_mem_wb = trap_redirect_req || mret_redirect_req;
-
-    // ==================== BTB / 分支预测器 ====================
-    // 查询用 pc（IF 正在取的地址）；更新在 ID 级分支/跳转判定完成那一拍。
-    // 预测结果沿 pend_* -> ibuf_* / if_id_* 逐级寄存（见文件上部声明处注释），
-    // 绝不在 ID 重新查表比对，避免索引别名导致的漏判。
-    btb u_btb (
-        .clk                 (clk),
-        .resetn              (resetn),
-        .pc_if               (pc),
-        .pred_taken          (btb_pred_taken),
-        .pred_target         (btb_pred_target),
-        .update_en           (if_id_valid && id_is_control),
-        .update_pc           (if_id_pc),
-        .update_target       (bj_pc),
-        .update_taken        (id_taken),
-        .update_always_taken (inst_jal | inst_jalr)
-    );
 
     // 只有当前串行指令到达 WB 才能结束等待，避免保持在 ID 的项重复发射。
     assign serial_done = (flow_state == FLOW_SERIAL_RUN) &&
