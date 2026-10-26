@@ -1280,3 +1280,85 @@ report_timing
 report_power 
 gen_netlist 
 gen_bit_stream 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+report_timing 
+report_power 
+gen_netlist 
+gen_bit_stream 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+report_timing 
+report_power 
+gen_netlist 
+gen_bit_stream 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+report_timing 
+set_arch -family Logos2 -device PG2L200H -speedgrade -6 -package FBB676
+compile -top_module board_top_ooo
+synthesize -ads -selected_syn_tool_opt 2 
+dev_map 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+pnr -gplace_seed 2 -gplace_times 4 -parallel 4 -mode {performance} 
+report_timing 
+report_power 
+gen_netlist 
+gen_bit_stream 
