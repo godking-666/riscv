@@ -610,8 +610,10 @@ int main(void){
             uint8_t c=(uint8_t)(R32(UART+UART_RX_DATA)&0xffu);
             if(c=='Q'||c=='q')break;
             if((c=='D'||c=='d') && cur_seq!=0u){
+                // ★ 流式下只能取 96x96（见 cnn.h export_dump 的说明）：
+                //   export_group() 要求持有相机缓冲，流式已 release，必然失败。
                 full_source_export=(c=='D');
-                export_group();
+                export_dump();
                 dump_requests++;
                 text("STREAM_CONTINUE AFTER_DUMP FRAMES=");dec(frame);text("\n");
             }

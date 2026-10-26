@@ -37,8 +37,9 @@ sys.path.insert(0, str(ROOT / 'tools' / 'camera_uart'))
 from capture import loader_plan          # noqa: E402
 from protocol import Wire, need, line    # noqa: E402
 
-TAG = 'stream_20261020_i'
-BUILD = ROOT / 'tests/cnn_digits_stream/build' / TAG
+TAG = 'stream_20261020_i'                 # 默认固件（digits 十类，已验收）
+BUILD_ROOT = ROOT / 'tests/cnn_digits_stream/build'
+BUILD = BUILD_ROOT / TAG
 MANIFEST = BUILD / 'manifest.json'
 FIRMWARE = BUILD / 'program.bin'
 # g: 软重启后复用已装载的 CNN 模型（clear_cmd 清 done，跳过 6222 词上传）
@@ -101,12 +102,30 @@ def main():
     p.add_argument('--frame-timeout', type=float, default=15.0, help='单帧等待秒数')
     p.add_argument('--loader-wait', type=float, default=0.0,
                    help='先等 N 秒再发 Loader 第一步：可以先启动脚本，再按 KEY0 复位（默认 0）')
+    p.add_argument('--build', default=None,
+                   help='改用它目录下的固件，例如 bookcup_b（默认 %s）' % TAG)
     args = p.parse_args()
+
+    # --build 覆盖固件身份；SHA 校验改用该 build 的 manifest 里记录的 bin_sha256，
+    # 保证"载入的确实是当时构建并审计过的那个 BIN"，而不是别的 tag。
+    global BUILD, MANIFEST, FIRMWARE, BIN_SHA256
+    if args.build:
+        BUILD = BUILD_ROOT / args.build
+        MANIFEST = BUILD / 'manifest.json'
+        FIRMWARE = BUILD / 'program.bin'
+        BIN_SHA256 = None            # 下面从 manifest 取
 
     need(args.log_dir is not None and not args.log_dir.exists(), '必须给一个全新 --log-dir')
     need(FIRMWARE.exists(), '固件不存在：' + str(FIRMWARE))
-    need(sha(FIRMWARE) == BIN_SHA256, '固件 SHA256 不符，请重新构建')
     need(MANIFEST.exists(), 'manifest 不存在：' + str(MANIFEST))
+    if BIN_SHA256 is None:
+        _man = json.loads(MANIFEST.read_text(encoding='utf-8'))
+        need(_man.get('bin_sha256') and _man.get('bin_path'),
+             'manifest 缺少 bin_sha256/bin_path：' + str(MANIFEST))
+        need(Path(ROOT / _man['bin_path']).resolve() == FIRMWARE.resolve(),
+             'manifest 的 bin_path 与 --build 不符：%s' % _man['bin_path'])
+        BIN_SHA256 = _man['bin_sha256']
+    need(sha(FIRMWARE) == BIN_SHA256, '固件 SHA256 不符，请重新构建')
 
     args.log_dir.mkdir(parents=True)
     manifest = json.loads(MANIFEST.read_text(encoding='utf-8'))

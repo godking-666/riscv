@@ -130,7 +130,8 @@ static void capture_group_stream(uint32_t target){
     text("SOURCE BUF=");dec(cur_buf);text(" SEQ=");dec(cur_seq);
     text(" WIDTH=1280 HEIGHT=720 BYTES=1843200 CRC=");hex(cur_src_crc);text("\n");
 }
-static void export_group(void){    identity_stable();text("CNN_EXPORT_BEGIN\n");uint32_t crc=0xffffffffu;
+// 旧的"导出整帧+源图"路径：流式固件改用 export_dump()，这里保留作单帧拍照版取证用途。
+static void __attribute__((unused)) export_group(void){    identity_stable();text("CNN_EXPORT_BEGIN\n");uint32_t crc=0xffffffffu;
     for(uint32_t off=0;off<OUT_BYTES;off+=CHUNK){
         load_words(OUT_BASE,off,CHUNK/4);
         for(uint32_t i=0;i<CHUNK;i++)crc=pp01_crc_step(crc,payload[i]);
@@ -154,6 +155,26 @@ static void export_group(void){    identity_stable();text("CNN_EXPORT_BEGIN\n");
     text("CNN_RELEASED CLAIMS=");dec(ledger_n);text(" DISCARDS=");dec(discard_claims);
     text(" GLOBAL_SEQ=");dec(R32(CAM+CAM_GLOBAL_SEQ));hfield(" CAM_STATE=",R32(CAM+CAM_BUFSTATE));
     hfield(" PP_STATUS=",R32(PP+8));hfield(" CNN_STATUS=",R32(CNN+8));text("\n");
+}
+// ★ 流式模式下 d/D 取图：export_group() 入口的 identity_stable() 要求
+//   cam_state(cur_buf)==3（CPU 持有），而流式循环返回前已经 cam_release()，
+//   所以流式下调用 export_group() 必然 fail("SOURCE_IDENTITY_CHANGED")。
+//   这里改为只读 PP 的输出区（OUT_BASE，在 DDR 里，不随 release 失效），
+//   完全不碰相机缓冲 → 不需要持有权，只核对 CPU 侧本帧的 CRC。
+//   说明：'D' 的整幅源图导出同样需要持有缓冲，流式下不可用，本函数对
+//   D/d 都给 96x96 RGB；整幅导出请用单帧拍照版固件。
+static void export_dump(void){
+    cam_healthy();
+    text("CNN_EXPORT_BEGIN\n");uint32_t crc=0xffffffffu;
+    for(uint32_t off=0;off<OUT_BYTES;off+=CHUNK){
+        load_words(OUT_BASE,off,CHUNK/4);
+        for(uint32_t i=0;i<CHUNK;i++)crc=pp01_crc_step(crc,payload[i]);
+        send_packet(1u,cur_seq,off,CHUNK,OUT_BYTES,pp01_crc_bytes(payload,CHUNK));
+    }
+    crc=pp01_crc_finish(crc);
+    if(crc!=cur_pp_crc)fail("DUMPED_RGB_CRC");   // DDR 被改过 / 本帧记录不符
+    send_packet(2u,cur_seq,OUT_BYTES,0u,OUT_BYTES,crc);
+    text("CNN_EXPORT_DONE\n");
 }
 #endif
 
