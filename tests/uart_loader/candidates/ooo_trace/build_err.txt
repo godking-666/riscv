@@ -1,0 +1,1 @@
+﻿ERR: D:\riscv\RISCV\tests\uart_loader\candidates\ooo_trace\crc32.c: In function 'loader_crc32_update':
