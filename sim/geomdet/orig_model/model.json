@@ -1,0 +1,100 @@
+{
+  "contract": "geomdet_int8_v1",
+  "purpose": "SYNTHETIC_GEOMETRIC_OBJECT_DETECTION",
+  "trained": true,
+  "classes": [
+    "ball",
+    "cube",
+    "cylinder"
+  ],
+  "num_class": 3,
+  "num_reg": 4,
+  "input": "96x96 gray (from RGB)",
+  "output": "[3 cls scores + cx,cy,w,h]",
+  "model_id": 2245251447,
+  "model_id_hex": "85d3d177",
+  "load_words": 6123,
+  "load_bytes": 24492,
+  "load_crc32": 1197148318,
+  "scales": [
+    {
+      "Fin": 7,
+      "Fw": 6,
+      "Fout": 5
+    },
+    {
+      "Fin": 5,
+      "Fw": 6,
+      "Fout": 4
+    },
+    {
+      "Fin": 4,
+      "Fw": 6,
+      "Fout": 1
+    },
+    {
+      "Fin": 1,
+      "Fw": 7,
+      "Fout": 7
+    }
+  ],
+  "shifts": [
+    8,
+    7,
+    9,
+    1
+  ],
+  "weight_layout": "O_KY_KX_I",
+  "activation_layout": "HWC",
+  "weight_offsets": [
+    0,
+    72,
+    1224,
+    5832,
+    6056
+  ],
+  "bias_offsets": [
+    0,
+    8,
+    24,
+    56,
+    63
+  ],
+  "shapes": [
+    [
+      32,
+      32,
+      1
+    ],
+    [
+      16,
+      16,
+      8
+    ],
+    [
+      8,
+      8,
+      16
+    ],
+    [
+      4,
+      4,
+      32
+    ],
+    [
+      32
+    ],
+    [
+      7
+    ]
+  ],
+  "rounding": "nearest_ties_away_from_zero",
+  "zero_point": 0,
+  "input_fraction_bits": 7,
+  "reg_scale": 128.0,
+  "identity": {
+    "seed": 20261020
+  },
+  "camera_accuracy_verified": false,
+  "hardware_verified": false
+}

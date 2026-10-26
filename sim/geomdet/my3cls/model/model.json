@@ -1,0 +1,99 @@
+{
+  "contract": "geomdet_int8_v1",
+  "purpose": "HOME_OBJECT_3CLASS_CLASSIFICATION",
+  "trained": true,
+  "classes": [
+    "photo frame",
+    "table",
+    "potted plant"
+  ],
+  "num_class": 3,
+  "num_reg": 4,
+  "input": "96x96 gray (from RGB)",
+  "output": "[3 cls scores + 4 unused reg]",
+  "model_id": 125970185,
+  "model_id_hex": "07822709",
+  "load_words": 6123,
+  "load_bytes": 24492,
+  "load_crc32": 363551206,
+  "scales": [
+    {
+      "Fin": 7,
+      "Fw": 6,
+      "Fout": 5
+    },
+    {
+      "Fin": 5,
+      "Fw": 6,
+      "Fout": 4
+    },
+    {
+      "Fin": 4,
+      "Fw": 6,
+      "Fout": 1
+    },
+    {
+      "Fin": 1,
+      "Fw": 6,
+      "Fout": 7
+    }
+  ],
+  "shifts": [
+    8,
+    7,
+    9,
+    0
+  ],
+  "weight_layout": "O_KY_KX_I",
+  "activation_layout": "HWC",
+  "weight_offsets": [
+    0,
+    72,
+    1224,
+    5832,
+    6056
+  ],
+  "bias_offsets": [
+    0,
+    8,
+    24,
+    56,
+    63
+  ],
+  "shapes": [
+    [
+      32,
+      32,
+      1
+    ],
+    [
+      16,
+      16,
+      8
+    ],
+    [
+      8,
+      8,
+      16
+    ],
+    [
+      4,
+      4,
+      32
+    ],
+    [
+      32
+    ],
+    [
+      7
+    ]
+  ],
+  "rounding": "nearest_ties_away_from_zero",
+  "zero_point": 0,
+  "input_fraction_bits": 7,
+  "reg_scale": 128.0,
+  "val_accuracy_float": 0.8049,
+  "val_accuracy_int8": 0.8039,
+  "input_form": "object crop +15% padding, square -> 32x32 gray",
+  "note": "GAP 无法定位，故只做分类；输出 [3..6] 未使用"
+}

@@ -1,0 +1,15 @@
+{
+  "mode": null,
+  "class_id": null,
+  "class_name": null,
+  "box_96": {
+    "cx": null,
+    "cy": null,
+    "w": null,
+    "h": null
+  },
+  "scores": [],
+  "cnn_cycles": null,
+  "pp_cycles": null,
+  "raw": "CNN_FAIL REASON=CNN_ERROR GROUP=1 BUF="
+}

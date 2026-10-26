@@ -1,0 +1,15 @@
+{
+  "app": "performance_700",
+  "iterations": 700,
+  "clock_hz": 93750000,
+  "ticks": 1039582382,
+  "seconds": 11.088878741333334,
+  "iterations_per_second": 63.12631027254173,
+  "cm_per_mhz": 0.6733473095737784,
+  "crcfinal": "0x65c5",
+  "validated": true,
+  "errors": false,
+  "total_time_int": 11,
+  "iters_sec_int": 63,
+  "raw": "2K performance run parameters for coremark.\nCoreMark Size    : 666\nTotal ticks      : 1039582382\nTotal time (secs): 11\nIterations/Sec   : 63\nIterations       : 700\nCompiler version : GCC15.2.0\nCompiler flags   : -Os -march=rv32i -mabi=ilp32; no LTO\nMemory location  : DDR code/data; static 2000-byte buffer\nseedcrc          : 0xe9f5\n[0]crclist       : 0xe714\n[0]crcmatrix     : 0x1fd7\n[0]crcstate      : 0x8e3a\n[0]crcfinal      : 0x65c5\nCorrect operation validated. See README.md for run and reporting rules.\nPORT_DONE ticks=1039582382 iterations=700 hz=93750000\n"
+}

@@ -1,0 +1,15 @@
+{
+  "mode": null,
+  "class_id": null,
+  "class_name": null,
+  "box_96": {
+    "cx": null,
+    "cy": null,
+    "w": null,
+    "h": null
+  },
+  "scores": [],
+  "cnn_cycles": null,
+  "pp_cycles": null,
+  "raw": "CNN_FAIL REASON=CNN_ERROR GROUP=1 BUF=0 SEQ=1 CLAIMS=1 TARGET_CLAIMS=1 DISCARD_CLAIMS=0 LAST_DISCARD=0 CAM_STATUS=00000025 CAM_ERR=00000000 CAM_BUFSTATE=0000012b CAM_GLOBAL_SEQ=00000002 PP_STATUS=00000002 PP_ERR=00000000 UART_STATUS=00000002 CNN_STATUS=0000000c CNN_ERROR=00000002 LOAD_COUNT=6123 MODEL_CRC=15ab59e6 MODEL_ID=07822709 ELAPSED_TICKS=375750508\n"
+}
