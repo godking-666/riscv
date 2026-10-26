@@ -80,8 +80,17 @@ _start:
     /* 7. main() */
     call    main
 
+#ifdef CM_RETURN_TO_LOADER
+    /* 跑完直接跳回 ROM 里的 UART Loader（地址 0x0），这样同一份位流可以
+       连续下载多个应用，不必按 KEY0 或重烧位流。
+       本核有 D$（写回）：Loader 自己会在跳转到新应用之前发 fence.i，
+       所以这里不需要额外清缓存。 */
+    lui     t0, 0x0
+    jalr    zero, 0(t0)
+#else
     /* main 返回：停在这里，等待复位或调试器 */
 7:  j       7b
+#endif
 
     .size   _start, . - _start
 
@@ -95,5 +104,12 @@ cm_trap_entry:
     csrr    a1, mepc
     csrr    a2, mtval
     call    cm_trap_report
+#ifdef CM_RETURN_TO_LOADER
+    /* 崩溃后也跳回 Loader，这样调试迭代不需要每次按 KEY0 / 重烧位流。
+       注意：cm_trap_report 已经用 UART 把 mcause/mepc/mtval 打出来了。 */
+    lui     t0, 0x0
+    jalr    zero, 0(t0)
+#else
 8:  j       8b
+#endif
     .size   cm_trap_entry, . - cm_trap_entry

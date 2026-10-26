@@ -30,4 +30,11 @@ _start:
     call main
     .globl program_return
 program_return:
+#ifdef RETURN_TO_LOADER
+    /* 应用跑完跳回 ROM 里的 UART Loader(0x0)：同一份位流可连续下载多个固件，
+       不必按 KEY0 或重烧位流。Loader 跳转到新应用前会自己发 fence.i 清 D$。 */
+    lui  t0,0
+    jalr zero,0(t0)
+#else
 5:  j 5b
+#endif
