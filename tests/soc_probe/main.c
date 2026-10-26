@@ -40,6 +40,37 @@ int main(void)
 {
     printf("\r\n=== SOC PROBE2 begin ===\r\n");
 
+    /* ---- 0) 时钟标定：8 条依赖 addi + addi + bnez = 10 拍/迭代 ----
+       用 MMIO CYCLE（93.75 MHz 计数）测时间；若 CPU 跑 135 MHz，
+       则 ticks ≈ cycles * 93.75/135 = cycles * 0.694。 */
+    {
+        uint32_t iters = 20000u;              /* 20000 * 10 = 200000 拍 */
+        uint32_t acc = 0;
+        uint32_t t0 = timer_cycles();
+        __asm__ volatile(
+            "1:\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %0, %0, 1\n\t"
+            "addi %1, %1, -1\n\t"
+            "bnez %1, 1b\n\t"
+            : "+r"(acc), "+r"(iters) : : "memory");
+        uint32_t t1 = timer_cycles();
+        sink += acc;
+        uint32_t ticks = t1 - t0;
+        uint32_t cyc = (20000u - iters) * 10u + 10u;   /* 实际完成的拍数（上界近似） */
+        printf("CLOCK ticks=%u approx_cpu_cycles=%u\r\n", ticks, cyc);
+        if (ticks) {
+            printf("CLOCK cpu_mhz_x100=%u (ticks=%u -> 93.75*cyc/ticks)\r\n",
+                   (uint32_t)(((uint64_t)9375u * cyc) / ticks));
+        }
+    }
+
     static uint32_t idx_small[32];
     for (uint32_t i = 0; i < 32u; i++) idx_small[i] = (i + 1u) & 31u;
     printf("small init ok\r\n");
