@@ -95,6 +95,15 @@ module mmio_cdc_bridge (
     reg       req_seen;
     reg       active;                    // 已受理一笔事务
     reg       accepted;                  // 互连已接受请求，撤销 valid
+    // 响应看门狗：如果从设备在 WD 个 core 周期内始终不返回响应，就合成一个
+    // 错误响应走正常握手路径交回 CPU（BSP 会打印 TRAP 并跳回 Loader），
+    // 这样"停摆"退化成一次可恢复的总线错误，不会让整块板子失联。
+    // 之后用一个"排空"状态丢弃那笔迟到的响应，避免被下一笔事务误取。
+    localparam integer WD_CORE   = 512;
+    localparam integer DRAIN_CORE = 512;
+    reg [9:0] rsp_wd;
+    reg [9:0] drain_wd;
+    reg       drain;
 
     assign core_req_valid = active && !accepted;
     assign core_req_write = q_write;
@@ -107,23 +116,54 @@ module mmio_cdc_bridge (
         if (!core_resetn) begin
             req_tgl_sync <= 2'b0; req_seen <= 1'b0; active <= 1'b0; accepted <= 1'b0;
             ack_tgl <= 1'b0; rsp_q_rdata <= 32'd0; rsp_q_error <= 1'b0;
+            rsp_wd <= 10'd0; drain <= 1'b0; drain_wd <= 10'd0;
         end else begin
             req_tgl_sync <= {req_tgl_sync[0], req_tgl};
 
-            if (!active && (req_tgl_sync[1] != req_seen)) begin
+            if (!active && !drain && (req_tgl_sync[1] != req_seen)) begin
                 req_seen <= req_tgl_sync[1];
                 active   <= 1'b1;
                 accepted <= 1'b0;
+                rsp_wd   <= 10'd0;
             end
+
             if (core_req_valid && core_req_ready) begin
                 accepted <= 1'b1;                    // 只发一次
             end
+
             if (active && core_rsp_valid) begin
                 rsp_q_rdata <= core_rsp_rdata;
                 rsp_q_error <= core_rsp_error;
                 active   <= 1'b0;
                 accepted <= 1'b0;
                 ack_tgl  <= ~ack_tgl;                // 数据已锁存，翻转安全
+                rsp_wd   <= 10'd0;
+            end else if (active) begin
+                if (rsp_wd >= WD_CORE[9:0]) begin
+                    // 从设备不响应：合成一个错误响应，然后进入排空
+                    rsp_q_rdata <= 32'd0;
+                    rsp_q_error <= 1'b1;
+                    active      <= 1'b0;
+                    accepted    <= 1'b0;
+                    ack_tgl     <= ~ack_tgl;
+                    rsp_wd      <= 10'd0;
+                    drain       <= 1'b1;
+                    drain_wd    <= 10'd0;
+                end else begin
+                    rsp_wd <= rsp_wd + 10'd1;
+                end
+            end
+
+            if (drain) begin
+                if (core_rsp_valid) begin
+                    drain    <= 1'b0;           // 丢掉迟到的响应
+                    drain_wd <= 10'd0;
+                end else if (drain_wd >= DRAIN_CORE[9:0]) begin
+                    drain    <= 1'b0;           // 等太久就放弃，恢复受理新事务
+                    drain_wd <= 10'd0;
+                end else begin
+                    drain_wd <= drain_wd + 10'd1;
+                end
             end
         end
     end
