@@ -281,6 +281,22 @@ module soc_ddr3_top_ooo #(
     end
     assign soc_resetn = soc_reset_pipe[1];
 
+    // ---------------------------------------------------------------- CPU 135 MHz PLL
+    // 与队友工程一致：125 MHz 参考 ×27/25 = 135 MHz，输出必须过 GTP_CLKBUFG 上全局网。
+    // ddr_ref_clk 是已由 GTP_INBUFDS 引入的未缓冲参考时钟（DDR IP 自己也在用它）。
+    wire cpu_pll_out, cpu_clk, cpu_pll_lock;
+    clk_cpu u_cpu_pll (
+        .clkin1(ddr_ref_clk),
+        .clkout0(cpu_pll_out),
+        .lock(cpu_pll_lock)
+    );
+    GTP_CLKBUFG u_cpu_clk_buf (
+        .CLKIN(cpu_pll_out),
+        .CLKOUT(cpu_clk)
+    );
+    // CPU 域复位请求：DDR 校准完成 + DDR PLL 锁定 + CPU PLL 锁定，全部就绪才放开。
+    wire cpu_reset_req = soc_resetn && cpu_pll_lock;
+
     soc_ddr3_leds #(
         .CORE_CLK_HZ(CORE_CLK_HZ),
         .SELFTEST_TIMEOUT_CYCLES(SELFTEST_TIMEOUT_CYCLES)
@@ -323,6 +339,8 @@ module soc_ddr3_top_ooo #(
         .camera_dual_mode(camera_dual_mode), .camera_cpu_owned(camera_cpu_owned),
         .clk(core_clk),
         .resetn(soc_resetn),
+        .cpu_clk(cpu_clk),
+        .cpu_reset_req(cpu_reset_req),
         .uart_rx(uart_rx), .uart_tx(uart_tx),
         .gpio_in(gpio_in), .gpio_out(gpio_out),
         .gpio_dir(gpio_dir), .gpio_irq(gpio_irq),

@@ -1,27 +1,18 @@
 // ============================================================================
-// ooo_soc_top  --  用队友乱序核取代顺序核的 SoC 顶层
+// ooo_soc_top  --  用队友乱序核取代顺序核的 SoC 顶层（135 MHz CPU / 93.75 MHz 外设）
 //
-// 对外端口与 myriscv/soc_top.v **完全一致**，因此上层的 soc_ddr3_top_ooo /
-// board_top_ooo / 视频子系统 / HDMI / OSD / 约束全部原样复用。
+// 对外端口与 myriscv/soc_top.v 一致（额外多出 cpu_clk / cpu_reset_req 两个时钟口），
+// 因此上层的 soc_ddr3_top_ooo / board_top_ooo / 视频子系统 / HDMI / OSD 全部原样复用。
 //
-// 内部结构（依据 myriscv_ooo 源码逐信号核对）：
-//   ooo_core --(64b I)--> ooo_ibus --+--> ooo_tcm(u_rom_tcm)   [0x0 + TCM_BYTES]
-//                                    +--> ooo_icache --> ooo_ddr_port --> DDR
-//            --(32b D)--> ooo_dbus --+--> ooo_tcm(u_ram_tcm)   [0x0 + TCM_BYTES]
-//                                    +--> ooo_dcache --> ooo_ddr_port --> DDR
-//                                    +--> data_bus_interconnect --> MMIO
+// 时钟域：
+//   cpu_clk = 135 MHz（clk_cpu PLL，125×27/25，与队友工程一致）
+//     └ ooo_core / ooo_ibus / ooo_dbus / ROM+RAN TCM / I$ / D$
+//   clk     = 93.75 MHz（DDR core_clk，与视频通路同域）
+//     └ ooo_ddr_port 的 ddr 侧 / data_bus_interconnect / uart / gpio / 相机 / PP / CNN
+//   ooo_ddr_port 内部自带 clk↔ddr_clk 的 CDC（这是它设计时就支持的）
+//   MMIO 请求/响应经 mmio_cdc_bridge 显式跨域
 //
-// 关键设计点（都有源码依据，见 doc/ooo_integration/集成设计规格_20261026.md）：
-//  1) 单时钟：CPU 与 DDR 同在 clk(core_clk 93.75MHz)。CoreMark/MHz 与频率无关，
-//     所以不引入 135MHz PLL，也就没有新增时钟域和 CDC。
-//  2) Harvard 同构：我们的 ROM 在指令总线的 0x0、RAM 在数据总线的 0x0，
-//     他核的 TCM 窗口也正好在 0x0，用两个 ooo_tcm 实例分别承载，互不干扰。
-//  3) ooo_dbus 的 T/C 端口**不传递写数据**（ooo_xbar.v:28-37 无 wdata 引脚），
-//     所以 d_we/d_wdata/d_wstrb 必须从 dreq_* 越级接出（同 soc_ooo.v:121-122）。
-//  4) ooo_dbus 的 I/O 口与 data_bus_interconnect 主口形状一致，且都是单笔在途，
-//     所以 MMIO 直接用我们自己的互连（相机/PP/CNN 地址译码零改动）。
-//  5) DDR 地址：ooo_ddr_port 取 addr[28:5]（ooo_ddr_port.v:136），
-//     而 0x4000_0000 的位[28:5] 全为 0，等价于减基址，和我们的仲裁链同一约定。
+// 其余设计要点见 doc/ooo_integration/集成设计规格_20261026.md
 // ============================================================================
 `timescale 1ns / 1ps
 
@@ -34,16 +25,13 @@ module ooo_soc_top #(
     parameter integer ENABLE_PREPROCESS = 0,
     parameter integer ENABLE_CAMERA     = 0,
     parameter integer ENABLE_GPIO       = 0,
-    // 仅为与 soc_top 的参数接口兼容而保留：本集成里 DDR 由 ooo_ddr_port 直连仲裁链，
-    // 没有"可选 DDR"的分支，故该参数不参与逻辑。
-    parameter integer ENABLE_DDR        = 1,
+    parameter integer ENABLE_DDR        = 1,   // 仅为参数接口兼容，见下
     parameter integer CLK_HZ            = 93_750_000,
     parameter integer UART_CLK_HZ       = 93_750_000,
     parameter [31:0]  UART_BASE         = 32'h1000_1000,
     parameter [31:0]  GPIO_BASE         = 32'h1000_5000,
     parameter integer GPIO_WIDTH        = 8,
     parameter [31:0]  MMIO_BASE         = 32'h1000_0000,
-    // Loader 常驻区：指令侧 ROM 与数据侧 RAM 都是这么大（16 KiB = 4096 字）
     parameter integer TCM_BYTES         = 16384,
     parameter         ROM_INIT_EVEN     = "D:/riscv/RISCV/myriscv_ooo/img/rom_even.hex",
     parameter         ROM_INIT_ODD      = "D:/riscv/RISCV/myriscv_ooo/img/rom_odd.hex",
@@ -54,7 +42,7 @@ module ooo_soc_top #(
     parameter integer LINE              = 64,
     parameter integer CTRL_ADDR_WIDTH   = 28
 ) (
-    // ---- 与 soc_top 一致的 MMIO 通道 ----
+    // ---- 与 soc_top 一致的 MMIO 通道（core_clk 域）----
     output wire cnn_req_valid, cnn_req_write,
     output wire [1:0] cnn_req_size,
     output wire [31:0] cnn_req_addr, cnn_req_wdata,
@@ -78,8 +66,10 @@ module ooo_soc_top #(
     input  wire camera_dual_mode,
     input  wire [1:0] camera_cpu_owned,
     // ---- 时钟/复位/中断 ----
-    input  wire        clk,
-    input  wire        resetn,
+    input  wire        clk,            // 93.75 MHz：DDR + 视频 + 外设
+    input  wire        resetn,         // core_clk 域复位
+    input  wire        cpu_clk,        // 135 MHz：CPU
+    input  wire        cpu_reset_req,  // CPU 域复位请求（异步置位，本模块内同步释放）
     input  wire        irq_external,
     input  wire        irq_software,
     input  wire        irq_timer,
@@ -121,12 +111,21 @@ module ooo_soc_top #(
     output wire [GPIO_WIDTH-1:0] gpio_dir,
     output wire        gpio_irq
 );
-    // TCM 窗口：0 起、TCM_BYTES 大小，掩码必须是 ~(size-1)（ooo_xbar.v:46/108 用掩码比基址）
     localparam [31:0] TCM_MASK = ~(TCM_BYTES - 1);
     localparam [31:0] DC_BASE  = DDR_BASE;
     localparam [31:0] DC_MASK  = DDR_ADDR_MASK;
     localparam [31:0] IO_BASE  = MMIO_BASE;
     localparam [31:0] IO_MASK  = 32'hffff_0000;
+
+    // ---------------------------------------------------------------- CPU 域复位
+    // 异步置位、同步释放：cpu_reset_req 由上层给出（含 PLL lock），
+    // 在这里用 3 级移位对齐到 cpu_clk，避免释放沿的亚稳态。
+    reg [2:0] cpu_rst_pipe;
+    always @(posedge cpu_clk or negedge cpu_reset_req) begin
+        if (!cpu_reset_req) cpu_rst_pipe <= 3'b000;
+        else               cpu_rst_pipe <= {cpu_rst_pipe[1:0], 1'b1};
+    end
+    wire cpu_resetn = cpu_rst_pipe[2];
 
     // ---------------------------------------------------------------- 乱序核
     wire        ireq_valid, ireq_ready, irsp_valid, irsp_error;
@@ -136,11 +135,11 @@ module ooo_soc_top #(
     wire [31:0] dreq_addr, dreq_wdata, drsp_rdata;
     wire [3:0]  dreq_wstrb;
     wire [1:0]  dreq_size;
-    wire        irq_timer_i, irq_soft_i, uart_irq, gpio_irq_i;
+    wire        uart_irq, gpio_irq_i;
     wire        cmo_req, cmo_done;
 
     ooo_core #(.RESET_PC(RESET_PC)) u_core (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .irq_external(irq_external | uart_irq | gpio_irq_i),
         .irq_software(irq_software), .irq_timer(irq_timer),
         .ireq_valid(ireq_valid), .ireq_addr(ireq_addr), .ireq_ready(ireq_ready),
@@ -165,7 +164,7 @@ module ooo_soc_top #(
 
     ooo_ibus #(.TCM_BASE(RESET_PC), .TCM_MASK(TCM_MASK), .HAS_IC(1),
                .IC_BASE(DC_BASE), .IC_MASK(DC_MASK)) u_ibus (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .m_valid(ireq_valid), .m_addr(ireq_addr), .m_ready(ireq_ready),
         .m_rsp_valid(irsp_valid), .m_rsp_data(irsp_data), .m_rsp_error(irsp_error),
         .t_valid(ti_valid), .t_addr(ti_addr), .t_rsp_valid(ti_rsp_valid), .t_rsp_data(ti_rsp_data),
@@ -173,24 +172,26 @@ module ooo_soc_top #(
         .c_rsp_error(ic_rsp_error)
     );
 
-    // 指令侧 TCM = Loader ROM（只用 i_ 口，d_ 口关掉）
+    // 指令侧 TCM = Loader ROM（只用 i_ 口）
     ooo_tcm #(.BYTES(TCM_BYTES), .INIT_EVEN(ROM_INIT_EVEN), .INIT_ODD(ROM_INIT_ODD)) u_rom_tcm (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .i_valid(ti_valid), .i_addr(ti_addr), .i_rsp_valid(ti_rsp_valid), .i_rsp_data(ti_rsp_data),
         .d_valid(1'b0), .d_we(1'b0), .d_addr(32'd0), .d_wdata(32'd0), .d_wstrb(4'd0),
         .d_rsp_valid(), .d_rsp_rdata()
     );
 
     // ---------------------------------------------------------------- 数据侧
-    wire        td_valid, td_rsp_valid, o_valid, o_ready, o_rsp_valid, o_rsp_error;
-    wire [31:0] td_addr, td_rsp_rdata, o_rsp_rdata;
+    wire        td_valid, td_rsp_valid;
+    wire [31:0] td_addr, td_rsp_rdata;
     wire        dc_valid, dc_ready, dc_rsp_valid, dc_rsp_error;
     wire [31:0] dc_rsp_rdata;
+    wire        o_valid, o_ready, o_rsp_valid, o_rsp_error;
+    wire [31:0] o_rsp_rdata;
 
     ooo_dbus #(.TCM_BASE(RESET_PC), .TCM_MASK(TCM_MASK), .HAS_DC(1),
                .DC_BASE(DC_BASE), .DC_MASK(DC_MASK),
                .IO_BASE(IO_BASE), .IO_MASK(IO_MASK)) u_dbus (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .m_valid(dreq_valid), .m_we(dreq_we), .m_addr(dreq_addr), .m_wdata(dreq_wdata),
         .m_wstrb(dreq_wstrb), .m_size(dreq_size), .m_ready(dreq_ready),
         .m_rsp_valid(drsp_valid), .m_rsp_rdata(drsp_rdata), .m_rsp_error(drsp_error),
@@ -204,7 +205,7 @@ module ooo_soc_top #(
     // 数据侧 TCM = Loader 的数据 RAM。写数据/字节使能必须从 dreq_* 越级取
     // （ooo_dbus 的 T 口只有 t_valid/t_addr，没有 wdata，见 ooo_xbar.v:28-31）。
     ooo_tcm #(.BYTES(TCM_BYTES), .INIT_EVEN(RAM_INIT_EVEN), .INIT_ODD(RAM_INIT_ODD)) u_ram_tcm (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .i_valid(1'b0), .i_addr(32'd0), .i_rsp_valid(), .i_rsp_data(),
         .d_valid(td_valid), .d_we(dreq_we), .d_addr(td_addr), .d_wdata(dreq_wdata),
         .d_wstrb(dreq_wstrb), .d_rsp_valid(td_rsp_valid), .d_rsp_rdata(td_rsp_rdata)
@@ -220,11 +221,11 @@ module ooo_soc_top #(
     wire              fl_done, inv_done;
 
     reg cmo_done_r;
-    always @(posedge clk) cmo_done_r <= resetn && cmo_req && inv_done;
+    always @(posedge cpu_clk) cmo_done_r <= cpu_resetn && cmo_req && inv_done;
     assign cmo_done = cmo_done_r;
 
     ooo_icache #(.SETS(IC_SETS), .LINE(LINE)) u_ic (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .c_valid(ic_valid), .c_addr(ireq_addr), .c_ready(ic_ready),
         .c_rsp_valid(ic_rsp_valid), .c_rsp_data(ic_rsp_data), .c_rsp_error(ic_rsp_error),
         .inv_req(cmo_req && fl_done), .inv_done(inv_done),
@@ -232,7 +233,7 @@ module ooo_soc_top #(
         .m_rsp_valid(im_rsp_valid), .m_rsp_data(im_rsp_data), .m_rsp_error(im_rsp_error)
     );
     ooo_dcache #(.SETS(DC_SETS), .LINE(LINE)) u_dc (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .c_valid(dc_valid), .c_we(dreq_we), .c_addr(dreq_addr), .c_wdata(dreq_wdata),
         .c_wstrb(dreq_wstrb), .c_ready(dc_ready),
         .c_rsp_valid(dc_rsp_valid), .c_rsp_rdata(dc_rsp_rdata), .c_rsp_error(dc_rsp_error),
@@ -240,8 +241,10 @@ module ooo_soc_top #(
         .m_valid(dm_valid), .m_we(dm_we), .m_addr(dm_addr), .m_wdata(dm_wdata), .m_ready(dm_ready),
         .m_rsp_valid(dm_rsp_valid), .m_rsp_data(dm_rsp_data), .m_rsp_error(dm_rsp_error)
     );
+
+    // 双时钟：CPU 侧 cpu_clk，DDR 侧 clk。ooo_ddr_port 内部自带 CDC。
     ooo_ddr_port #(.LINE(LINE), .CTRL_ADDR_WIDTH(CTRL_ADDR_WIDTH)) u_port (
-        .clk(clk), .resetn(resetn),
+        .clk(cpu_clk), .resetn(cpu_resetn),
         .i_valid(im_valid), .i_addr(im_addr), .i_ready(im_ready),
         .i_rsp_valid(im_rsp_valid), .i_rsp_data(im_rsp_data), .i_rsp_error(im_rsp_error),
         .d_valid(dm_valid), .d_we(dm_we), .d_addr(dm_addr), .d_wdata(dm_wdata), .d_ready(dm_ready),
@@ -254,8 +257,26 @@ module ooo_soc_top #(
         .axi_arlen(ddr_axi_arlen), .axi_arready(ddr_axi_arready), .axi_arvalid(ddr_axi_arvalid),
         .axi_rdata(ddr_axi_rdata), .axi_rvalid(ddr_axi_rvalid)
     );
-    // 本方案 CPU 不再经过 dual_sram_to_pango_ddr_bridge，这两个侧带输入用不到
-    wire _unused_wusero = |{ddr_axi_wusero_id, ddr_axi_wusero_last, ddr_axi_rid, ddr_axi_rlast};
+    wire _unused = |{ddr_axi_wusero_id, ddr_axi_wusero_last, ddr_axi_rid, ddr_axi_rlast};
+
+    // ---------------------------------------------------------------- MMIO 跨域桥
+    wire        c_req_valid, c_req_write, c_req_ready, c_rsp_valid, c_rsp_error;
+    wire [1:0]  c_req_size;
+    wire [31:0] c_req_addr, c_req_wdata, c_rsp_rdata;
+    wire [3:0]  c_req_wstrb;
+
+    mmio_cdc_bridge u_mmio_bridge (
+        .cpu_clk(cpu_clk), .cpu_resetn(cpu_resetn),
+        .cpu_req_valid(o_valid), .cpu_req_write(dreq_we), .cpu_req_size(dreq_size),
+        .cpu_req_addr(dreq_addr), .cpu_req_wdata(dreq_wdata), .cpu_req_wstrb(dreq_wstrb),
+        .cpu_req_ready(o_ready),
+        .cpu_rsp_valid(o_rsp_valid), .cpu_rsp_rdata(o_rsp_rdata), .cpu_rsp_error(o_rsp_error),
+        .core_clk(clk), .core_resetn(resetn),
+        .core_req_valid(c_req_valid), .core_req_write(c_req_write), .core_req_size(c_req_size),
+        .core_req_addr(c_req_addr), .core_req_wdata(c_req_wdata), .core_req_wstrb(c_req_wstrb),
+        .core_req_ready(c_req_ready),
+        .core_rsp_valid(c_rsp_valid), .core_rsp_rdata(c_rsp_rdata), .core_rsp_error(c_rsp_error)
+    );
 
     // ---------------------------------------------------------------- MMIO 互连
     wire mmio_req_valid, mmio_req_write, mmio_req_ready, mmio_rsp_valid, mmio_rsp_error;
@@ -273,8 +294,6 @@ module ooo_soc_top #(
     wire [31:0] gpio_req_addr, gpio_req_wdata, gpio_rsp_rdata;
     wire [3:0] gpio_req_wstrb;
 
-    // 本互连的 RAM/DDR 通道在这里不会被选中：0x0 段已由 ooo_dbus 的 TCM 窗口吃掉，
-    // 0x4000_0000 段已由 DC 窗口吃掉，CPU 侧看到的只有 MMIO。故把这两路响应拉死。
     wire ram_req_valid, ram_req_write, ram_req_ready, ram_rsp_valid, ram_rsp_error;
     wire [1:0] ram_req_size;
     wire [31:0] ram_req_addr, ram_req_wdata, ram_rsp_rdata;
@@ -302,10 +321,10 @@ module ooo_soc_top #(
     ) u_interconnect (
         .clk(clk), .resetn(resetn),
         .ddr_write_buffer_busy(1'b0),
-        .m_req_valid(o_valid), .m_req_write(dreq_we), .m_req_size(dreq_size),
-        .m_req_addr(dreq_addr), .m_req_wdata(dreq_wdata), .m_req_wstrb(dreq_wstrb),
-        .m_req_ready(o_ready), .m_rsp_valid(o_rsp_valid), .m_rsp_rdata(o_rsp_rdata),
-        .m_rsp_error(o_rsp_error),
+        .m_req_valid(c_req_valid), .m_req_write(c_req_write), .m_req_size(c_req_size),
+        .m_req_addr(c_req_addr), .m_req_wdata(c_req_wdata), .m_req_wstrb(c_req_wstrb),
+        .m_req_ready(c_req_ready), .m_rsp_valid(c_rsp_valid), .m_rsp_rdata(c_rsp_rdata),
+        .m_rsp_error(c_rsp_error),
         .ram_req_valid(ram_req_valid), .ram_req_write(ram_req_write), .ram_req_size(ram_req_size),
         .ram_req_addr(ram_req_addr), .ram_req_wdata(ram_req_wdata), .ram_req_wstrb(ram_req_wstrb),
         .ram_req_ready(ram_req_ready), .ram_rsp_valid(ram_rsp_valid), .ram_rsp_rdata(ram_rsp_rdata),
@@ -342,7 +361,7 @@ module ooo_soc_top #(
         .camera_busy(camera_busy), .camera_dual_mode(camera_dual_mode),
         .camera_cpu_owned(camera_cpu_owned)
     );
-    // RAM/DDR 通道在本设计里不会被选中，响应恒 0 即可
+    // RAM/DDR 通道在这里不会被选中（0x0 段被 TCM 窗口吃掉、0x4000_0000 段被 DC 窗口吃掉）
     assign ram_req_ready = 1'b0; assign ram_rsp_valid = 1'b0;
     assign ram_rsp_rdata = 32'd0; assign ram_rsp_error = 1'b0;
     assign ddr_req_ready = 1'b0; assign ddr_rsp_valid = 1'b0;
